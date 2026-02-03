@@ -33,11 +33,11 @@ struct WishlistDetailView: View {
                 toolbarMenu
             }
         }
+        .task {
+            setupDependencies()
+        }
         .refreshable {
             await viewModel.refreshWishlist()
-        }
-        .onAppear {
-            setupDependencies()
         }
         .overlay(alignment: .top) {
             if viewModel.isOffline {

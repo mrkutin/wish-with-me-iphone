@@ -28,10 +28,8 @@ struct WishlistsView: View {
             await viewModel.refreshWishlists()
         }
         .task {
-            await viewModel.loadWishlists()
-        }
-        .onAppear {
             setupDependencies()
+            await viewModel.loadWishlists()
         }
         .overlay(alignment: .top) {
             if viewModel.isOffline {
