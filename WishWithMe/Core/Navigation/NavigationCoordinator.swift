@@ -30,17 +30,26 @@ enum DeepLink: Equatable {
     case sharedWishlist(token: String)
     case followWishlist(token: String)
 
+    /// Validates that an ID or token contains only safe characters (alphanumeric + hyphen + underscore)
+    /// and has a reasonable length (1-128 characters)
+    private static func isValidIdentifier(_ value: String) -> Bool {
+        let pattern = "^[a-zA-Z0-9_-]{1,128}$"
+        return value.range(of: pattern, options: .regularExpression) != nil
+    }
+
     init?(url: URL) {
         // Handle custom URL scheme: wishwithme://
         if url.scheme == "wishwithme" {
             switch url.host {
             case "wishlist":
-                if let id = url.pathComponents.dropFirst().first {
+                if let id = url.pathComponents.dropFirst().first,
+                   Self.isValidIdentifier(id) {
                     self = .wishlist(id: id)
                     return
                 }
             case "share", "follow":
-                if let token = url.pathComponents.dropFirst().first {
+                if let token = url.pathComponents.dropFirst().first,
+                   Self.isValidIdentifier(token) {
                     self = .followWishlist(token: token)
                     return
                 }
@@ -57,14 +66,20 @@ enum DeepLink: Equatable {
                 switch pathComponents[0] {
                 case "wishlists":
                     if pathComponents[1] == "follow", pathComponents.count >= 3 {
-                        self = .followWishlist(token: pathComponents[2])
+                        let token = pathComponents[2]
+                        guard Self.isValidIdentifier(token) else { return nil }
+                        self = .followWishlist(token: token)
                         return
                     } else {
-                        self = .wishlist(id: pathComponents[1])
+                        let id = pathComponents[1]
+                        guard Self.isValidIdentifier(id) else { return nil }
+                        self = .wishlist(id: id)
                         return
                     }
                 case "share":
-                    self = .sharedWishlist(token: pathComponents[1])
+                    let token = pathComponents[1]
+                    guard Self.isValidIdentifier(token) else { return nil }
+                    self = .sharedWishlist(token: token)
                     return
                 default:
                     break

@@ -15,6 +15,7 @@
 "auth.oauth.yandex" = "Continue with Yandex";
 "auth.toggle.signup" = "Don't have an account? Sign up";
 "auth.toggle.login" = "Already have an account? Sign in";
+"auth.password.hint" = "Password must be 8+ characters with uppercase, lowercase, and number";
 
 /* Wishlists */
 "wishlists.title" = "My Wishlists";

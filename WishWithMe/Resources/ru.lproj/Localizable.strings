@@ -15,6 +15,7 @@
 "auth.oauth.yandex" = "Продолжить с Яндекс";
 "auth.toggle.signup" = "Нет аккаунта? Зарегистрируйтесь";
 "auth.toggle.login" = "Уже есть аккаунт? Войдите";
+"auth.password.hint" = "Пароль должен содержать 8+ символов: заглавные, строчные буквы и цифры";
 
 /* Wishlists */
 "wishlists.title" = "Мои списки";

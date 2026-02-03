@@ -53,6 +53,15 @@ struct AuthenticationView: View {
                     }
                     .padding(.horizontal, 24)
 
+                    // Password Hint
+                    if let hint = passwordHint {
+                        Text(hint)
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 24)
+                    }
+
                     // Error Message
                     if let errorMessage = errorMessage {
                         Text(errorMessage)
@@ -137,8 +146,25 @@ struct AuthenticationView: View {
         if isShowingLogin {
             return !email.isEmpty && !password.isEmpty
         } else {
-            return !name.isEmpty && !email.isEmpty && password.count >= 6
+            return !name.isEmpty && !email.isEmpty && isPasswordValid
         }
+    }
+
+    /// Password must be at least 8 characters and contain:
+    /// - At least one uppercase letter
+    /// - At least one lowercase letter
+    /// - At least one digit
+    private var isPasswordValid: Bool {
+        guard password.count >= 8 else { return false }
+        let hasUppercase = password.range(of: "[A-Z]", options: .regularExpression) != nil
+        let hasLowercase = password.range(of: "[a-z]", options: .regularExpression) != nil
+        let hasDigit = password.range(of: "[0-9]", options: .regularExpression) != nil
+        return hasUppercase && hasLowercase && hasDigit
+    }
+
+    private var passwordHint: String? {
+        guard !isShowingLogin && !password.isEmpty && !isPasswordValid else { return nil }
+        return String(localized: "auth.password.hint")
     }
 
     private func performAuth() async {

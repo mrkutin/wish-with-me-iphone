@@ -114,6 +114,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0B7DA541AC51C04E8A4DBFEA /* Components */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		10536C3A31B89AC4F5D8DFC4 /* Features */ = {
 			isa = PBXGroup;
 			children = (
@@ -130,6 +137,10 @@
 		27DC1912C608E7C618C493C0 /* WishWithMeTests */ = {
 			isa = PBXGroup;
 			children = (
+				E400157E8803BD23C86C5040 /* APIClientTests */,
+				9C47C5A37EA13385D114FD15 /* ModelTests */,
+				5329E715EEEB4285D31CE45A /* SyncEngineTests */,
+				70DAA29002A22FB022E49066 /* ViewModelTests */,
 				6B98CCF03FA75D43B4A29EC1 /* Info.plist */,
 			);
 			path = WishWithMeTests;
@@ -138,6 +149,10 @@
 		30DBA66A514934F980F83000 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				0B7DA541AC51C04E8A4DBFEA /* Components */,
+				5379E1C5166C71785532E873 /* Modifiers */,
+				A92339BF17A460289C4D28D4 /* ViewModels */,
+				3F8FE5BFC28462134E9242AC /* Views */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -145,14 +160,23 @@
 		3D0EAB0C35A0AA0F0DF94405 /* Items */ = {
 			isa = PBXGroup;
 			children = (
+				CFF78261488AA05382F73980 /* ViewModels */,
 				D00F5D9A51188815EEB1B4FD /* Views */,
 			);
 			path = Items;
 			sourceTree = "<group>";
 		};
+		3F8FE5BFC28462134E9242AC /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		46603A0C7B63141726B9DE43 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				9A61718A5629C76B640E0E6C /* ViewModels */,
 				491F42AAA48F403756ABB022 /* Views */,
 			);
 			path = Profile;
@@ -169,6 +193,13 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		4A0E54B403BC8DDF974E38A7 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		5045633E4CE0E96969AB838F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -176,6 +207,20 @@
 				FD4447E5509AEBF331CBB411 /* ViewState.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		5329E715EEEB4285D31CE45A /* SyncEngineTests */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = SyncEngineTests;
+			sourceTree = "<group>";
+		};
+		5379E1C5166C71785532E873 /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Modifiers;
 			sourceTree = "<group>";
 		};
 		5AC9C0B831A63FA8569B8F89 /* Resources */ = {
@@ -187,6 +232,27 @@
 				75ACFE9A8508D8785B5E1BC3 /* WishWithMe.entitlements */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		631CF8EE96B5F67D794E7263 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		704C135217A899ABAE70C482 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		70DAA29002A22FB022E49066 /* ViewModelTests */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModelTests;
 			sourceTree = "<group>";
 		};
 		73797E812C28C4955953C5E9 /* WishWithMe */ = {
@@ -251,6 +317,20 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
+		9A61718A5629C76B640E0E6C /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		9C47C5A37EA13385D114FD15 /* ModelTests */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ModelTests;
+			sourceTree = "<group>";
+		};
 		A3A946D6D81DD459F7E7CE8E /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -282,6 +362,13 @@
 			);
 			sourceTree = "<group>";
 		};
+		A92339BF17A460289C4D28D4 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		AE70EB0F59056BD3DACADE82 /* DI */ = {
 			isa = PBXGroup;
 			children = (
@@ -304,6 +391,8 @@
 		B31F47594060A871A2BB2A18 /* Sharing */ = {
 			isa = PBXGroup;
 			children = (
+				4A0E54B403BC8DDF974E38A7 /* ViewModels */,
+				704C135217A899ABAE70C482 /* Views */,
 			);
 			path = Sharing;
 			sourceTree = "<group>";
@@ -326,6 +415,13 @@
 			path = Navigation;
 			sourceTree = "<group>";
 		};
+		CFF78261488AA05382F73980 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		D00F5D9A51188815EEB1B4FD /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -334,9 +430,24 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		E34155B6B1242C28F055F039 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		E400157E8803BD23C86C5040 /* APIClientTests */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = APIClientTests;
+			sourceTree = "<group>";
+		};
 		E512E25F6BCE673F692AE36C /* Auth */ = {
 			isa = PBXGroup;
 			children = (
+				631CF8EE96B5F67D794E7263 /* ViewModels */,
 				FC91D9391A62CC32E9CA3A2F /* Views */,
 			);
 			path = Auth;
@@ -345,6 +456,7 @@
 		FC1FB1CC875000E18E25354D /* Wishlists */ = {
 			isa = PBXGroup;
 			children = (
+				E34155B6B1242C28F055F039 /* ViewModels */,
 				78B1D5B932D40A304FCA2C37 /* Views */,
 			);
 			path = Wishlists;
