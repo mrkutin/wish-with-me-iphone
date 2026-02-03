@@ -18,7 +18,7 @@ struct ProfileView: View {
 
                             Text(user.name.prefix(1).uppercased())
                                 .font(.title2.bold())
-                                .foregroundStyle(.appPrimary)
+                                .foregroundStyle(Color.appPrimary)
                         }
 
                         // Info
@@ -114,7 +114,7 @@ struct ProfileView: View {
                     )
                 } label: {
                     Label(String(localized: "profile.deleteAccount"), systemImage: "trash")
-                        .foregroundStyle(.appError)
+                        .foregroundStyle(Color.appError)
                 }
             } footer: {
                 Text(String(localized: "profile.deleteAccount.warning"))

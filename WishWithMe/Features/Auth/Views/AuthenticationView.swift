@@ -17,7 +17,7 @@ struct AuthenticationView: View {
                     VStack(spacing: 16) {
                         Image(systemName: "gift.fill")
                             .font(.system(size: 64))
-                            .foregroundStyle(.appPrimary)
+                            .foregroundStyle(Color.appPrimary)
 
                         Text("WishWithMe")
                             .font(.largeTitle.bold())
@@ -66,7 +66,7 @@ struct AuthenticationView: View {
                     if let errorMessage = errorMessage {
                         Text(errorMessage)
                             .font(.footnote)
-                            .foregroundStyle(.appError)
+                            .foregroundStyle(Color.appError)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 24)
                     }
@@ -133,7 +133,7 @@ struct AuthenticationView: View {
                              ? String(localized: "auth.toggle.signup")
                              : String(localized: "auth.toggle.login"))
                             .font(.footnote)
-                            .foregroundStyle(.appPrimary)
+                            .foregroundStyle(Color.appPrimary)
                     }
                     .padding(.bottom, 32)
                 }

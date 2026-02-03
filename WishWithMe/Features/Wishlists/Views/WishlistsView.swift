@@ -66,7 +66,7 @@ struct WishlistsView: View {
                     } label: {
                         Label(String(localized: "button.share"), systemImage: "square.and.arrow.up")
                     }
-                    .tint(.appPrimary)
+                    .tint(Color.appPrimary)
                 }
             }
         }
@@ -155,7 +155,7 @@ struct WishlistRowView: View {
                         systemImage: "calendar"
                     )
                     .font(.caption)
-                    .foregroundStyle(dueDate < Date() ? .appError : .secondary)
+                    .foregroundStyle(dueDate < Date() ? Color.appError : .secondary)
                 }
 
                 Spacer()

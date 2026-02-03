@@ -66,7 +66,7 @@ struct ItemDetailView: View {
                         HStack {
                             Text(formatPrice(price, currency: item.currency))
                                 .font(.title.bold())
-                                .foregroundStyle(.appPrimary)
+                                .foregroundStyle(Color.appPrimary)
 
                             if let marketplace = item.marketplace {
                                 MarketplaceBadge(marketplace: marketplace)
@@ -290,7 +290,7 @@ struct StatusBadge: View {
         .padding(.horizontal, 12)
         .padding(.vertical, 6)
         .background(bought ? Color.appSuccess.opacity(0.15) : Color.appInfo.opacity(0.15))
-        .foregroundStyle(bought ? .appSuccess : .appInfo)
+        .foregroundStyle(bought ? Color.appSuccess : Color.appInfo)
         .clipShape(Capsule())
     }
 }

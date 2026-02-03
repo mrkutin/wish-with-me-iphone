@@ -142,7 +142,7 @@ struct SharedWishlistRowView: View {
                         systemImage: "calendar"
                     )
                     .font(.caption)
-                    .foregroundStyle(dueDate < Date() ? .appError : .secondary)
+                    .foregroundStyle(dueDate < Date() ? Color.appError : .secondary)
                 }
             }
         }

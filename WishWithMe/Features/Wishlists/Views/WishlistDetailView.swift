@@ -98,11 +98,11 @@ struct WishlistDetailView: View {
 
                     Text("\(boughtCount)/\(totalCount)")
                         .font(.subheadline.bold())
-                        .foregroundStyle(.appPrimary)
+                        .foregroundStyle(Color.appPrimary)
                 }
 
                 ProgressView(value: Double(boughtCount), total: Double(max(totalCount, 1)))
-                    .tint(.appPrimary)
+                    .tint(Color.appPrimary)
             }
 
             // Items Section
@@ -125,7 +125,7 @@ struct WishlistDetailView: View {
                                 systemImage: item.bought ? "xmark.circle" : "checkmark.circle"
                             )
                         }
-                        .tint(item.bought ? .orange : .appSuccess)
+                        .tint(item.bought ? .orange : Color.appSuccess)
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         Button(role: .destructive) {
@@ -139,7 +139,7 @@ struct WishlistDetailView: View {
                         } label: {
                             Label(String(localized: "button.edit"), systemImage: "pencil")
                         }
-                        .tint(.appPrimary)
+                        .tint(Color.appPrimary)
                     }
                 }
             } header: {
@@ -210,7 +210,7 @@ struct ItemRowView: View {
             // Checkbox
             Image(systemName: item.bought ? "checkmark.circle.fill" : "circle")
                 .font(.title2)
-                .foregroundStyle(item.bought ? .appSuccess : .secondary)
+                .foregroundStyle(item.bought ? Color.appSuccess : .secondary)
 
             // Item Info
             VStack(alignment: .leading, spacing: 4) {
@@ -229,7 +229,7 @@ struct ItemRowView: View {
                     if let price = item.price {
                         Text(formatPrice(price, currency: item.currency))
                             .font(.subheadline.bold())
-                            .foregroundStyle(.appPrimary)
+                            .foregroundStyle(Color.appPrimary)
                     }
 
                     if let marketplace = item.marketplace {
@@ -279,9 +279,9 @@ struct PriorityBadge: View {
 
     private var priorityColor: Color {
         switch priority {
-        case .high: return .appError
-        case .medium: return .appWarning
-        case .low: return .appInfo
+        case .high: return Color.appError
+        case .medium: return Color.appWarning
+        case .low: return Color.appInfo
         }
     }
 }

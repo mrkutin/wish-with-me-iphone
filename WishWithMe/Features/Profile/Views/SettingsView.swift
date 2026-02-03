@@ -45,13 +45,15 @@ struct SettingsView: View {
             }
 
             // Language Section
-            Section(String(localized: "settings.language")) {
+            Section {
                 Picker(String(localized: "settings.language"), selection: $preferredLanguage) {
                     Text("English").tag("en")
                     Text("Русский").tag("ru")
                 }
                 .pickerStyle(.inline)
                 .labelsHidden()
+            } header: {
+                Text(String(localized: "settings.language"))
             } footer: {
                 Text(String(localized: "settings.language.hint"))
             }
@@ -72,7 +74,7 @@ struct SettingsView: View {
             }
 
             // Notifications Section
-            Section(String(localized: "settings.notifications")) {
+            Section {
                 Button {
                     if let url = URL(string: UIApplication.openSettingsURLString) {
                         UIApplication.shared.open(url)
@@ -80,6 +82,8 @@ struct SettingsView: View {
                 } label: {
                     Label(String(localized: "settings.notificationSettings"), systemImage: "bell.badge")
                 }
+            } header: {
+                Text(String(localized: "settings.notifications"))
             } footer: {
                 Text(String(localized: "settings.notifications.hint"))
             }

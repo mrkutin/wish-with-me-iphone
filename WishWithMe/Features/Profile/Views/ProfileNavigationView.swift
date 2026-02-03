@@ -58,7 +58,7 @@ struct AboutView: View {
                 VStack(spacing: 16) {
                     Image(systemName: "gift.fill")
                         .font(.system(size: 64))
-                        .foregroundStyle(.appPrimary)
+                        .foregroundStyle(Color.appPrimary)
 
                     Text("WishWithMe")
                         .font(.title.bold())
@@ -124,7 +124,7 @@ struct FeatureRow: View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: icon)
                 .font(.title2)
-                .foregroundStyle(.appPrimary)
+                .foregroundStyle(Color.appPrimary)
                 .frame(width: 32)
 
             VStack(alignment: .leading, spacing: 4) {

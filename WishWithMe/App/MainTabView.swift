@@ -31,7 +31,7 @@ struct MainTabView: View {
                     }
                     .tag(Tab.profile)
             }
-            .tint(.appPrimary)
+            .tint(Color.appPrimary)
 
             // Offline Banner
             if showOfflineBanner {

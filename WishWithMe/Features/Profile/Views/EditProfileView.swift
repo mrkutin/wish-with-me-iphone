@@ -36,7 +36,7 @@ struct EditProfileView: View {
                 if let errorMessage = errorMessage {
                     Section {
                         Text(errorMessage)
-                            .foregroundStyle(.appError)
+                            .foregroundStyle(Color.appError)
                             .font(.footnote)
                     }
                 }
