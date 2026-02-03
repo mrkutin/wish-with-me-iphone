@@ -2,33 +2,20 @@ import SwiftUI
 import SwiftData
 
 struct WishlistsView: View {
-    @Environment(\.dataController) private var dataController
     @Environment(\.apiClient) private var apiClient
+    @Environment(\.dataController) private var dataController
     @Environment(\.networkMonitor) private var networkMonitor
+    @Environment(\.authManager) private var authManager
 
-    @Query(
-        filter: #Predicate<Wishlist> { !$0.pendingDeletion },
-        sort: \Wishlist.updatedAt,
-        order: .reverse
-    )
-    private var wishlists: [Wishlist]
-
-    @State private var viewState: ViewState<[Wishlist]> = .idle
-    @State private var searchText = ""
     @Bindable var coordinator: WishlistsNavigationCoordinator
 
-    var filteredWishlists: [Wishlist] {
-        if searchText.isEmpty {
-            return wishlists
-        }
-        return wishlists.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
-    }
+    @State private var viewModel = WishlistsViewModel()
 
     var body: some View {
         Group {
-            if wishlists.isEmpty && viewState.isLoading {
+            if viewModel.isLoading && viewModel.isEmpty {
                 LoadingView()
-            } else if wishlists.isEmpty {
+            } else if viewModel.isEmpty {
                 EmptyWishlistsView {
                     coordinator.showCreateWishlist()
                 }
@@ -36,18 +23,50 @@ struct WishlistsView: View {
                 wishlistsList
             }
         }
-        .searchable(text: $searchText, prompt: String(localized: "wishlists.search"))
+        .searchable(text: $viewModel.searchText, prompt: String(localized: "wishlists.search"))
         .refreshable {
-            await refreshWishlists()
+            await viewModel.refreshWishlists()
         }
         .task {
-            await loadWishlists()
+            await viewModel.loadWishlists()
+        }
+        .onAppear {
+            setupDependencies()
+        }
+        .overlay(alignment: .top) {
+            if viewModel.isOffline {
+                offlineBanner
+            }
         }
     }
 
+    // MARK: - Wishlists List
+
     private var wishlistsList: some View {
         List {
-            ForEach(filteredWishlists) { wishlist in
+            // Sync status section
+            if viewModel.hasUnsyncedChanges {
+                Section {
+                    HStack {
+                        Image(systemName: "arrow.triangle.2.circlepath")
+                            .foregroundStyle(Color.appWarning)
+                        Text(String(localized: "wishlists.pendingSync"))
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Button(String(localized: "button.syncNow")) {
+                            Task {
+                                await viewModel.syncPendingChanges()
+                            }
+                        }
+                        .font(.subheadline)
+                        .disabled(viewModel.isOffline)
+                    }
+                }
+            }
+
+            // Wishlists
+            ForEach(viewModel.filteredWishlists) { wishlist in
                 Button {
                     coordinator.navigateToWishlistDetail(wishlist)
                 } label: {
@@ -68,35 +87,50 @@ struct WishlistsView: View {
                     }
                     .tint(Color.appPrimary)
                 }
+                .swipeActions(edge: .leading) {
+                    Button {
+                        coordinator.showEditWishlist(wishlist)
+                    } label: {
+                        Label(String(localized: "button.edit"), systemImage: "pencil")
+                    }
+                    .tint(Color.appInfo)
+                }
             }
         }
         .listStyle(.plain)
     }
 
-    private func loadWishlists() async {
-        guard viewState.data == nil else { return }
-        await refreshWishlists()
+    // MARK: - Offline Banner
+
+    private var offlineBanner: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "wifi.slash")
+            Text(String(localized: "offline.banner"))
+        }
+        .font(.footnote.bold())
+        .foregroundStyle(.white)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+        .background(Color.appWarning)
+        .clipShape(Capsule())
+        .padding(.top, 8)
+        .transition(.move(edge: .top).combined(with: .opacity))
+        .animation(.easeInOut, value: viewModel.isOffline)
     }
 
-    private func refreshWishlists() async {
-        viewState = .loading
+    // MARK: - Actions
 
-        guard let apiClient = apiClient else {
-            viewState = .error(AppError.unknown)
-            return
-        }
-
-        do {
-            let dtos = try await apiClient.getWishlists()
-            try dataController?.saveWishlists(dtos)
-            viewState = .loaded(wishlists)
-        } catch {
-            // If offline, show cached data
-            if !(networkMonitor?.isConnected ?? true) && !wishlists.isEmpty {
-                viewState = .loaded(wishlists)
-            } else {
-                viewState = .error(AppError(from: error))
-            }
+    private func setupDependencies() {
+        if let apiClient = apiClient,
+           let dataController = dataController,
+           let networkMonitor = networkMonitor,
+           let authManager = authManager {
+            viewModel.setDependencies(
+                apiClient: apiClient,
+                dataController: dataController,
+                networkMonitor: networkMonitor,
+                authManager: authManager
+            )
         }
     }
 
@@ -108,12 +142,7 @@ struct WishlistsView: View {
                 confirmTitle: String(localized: "button.delete"),
                 onConfirm: {
                     Task {
-                        try? dataController?.markWishlistForDeletion(wishlist)
-
-                        if networkMonitor?.isConnected ?? false {
-                            try? await apiClient?.deleteWishlist(id: wishlist.id)
-                            try? dataController?.deleteWishlist(wishlist)
-                        }
+                        try? await viewModel.deleteWishlist(wishlist)
                     }
                 }
             )
@@ -143,7 +172,7 @@ struct WishlistRowView: View {
 
             HStack(spacing: 16) {
                 Label(
-                    "\(wishlist.items.count)",
+                    "\(wishlist.items.filter { !$0.pendingDeletion }.count)",
                     systemImage: "gift"
                 )
                 .font(.caption)
@@ -169,6 +198,9 @@ struct WishlistRowView: View {
             }
         }
         .padding(.vertical, 4)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(wishlist.name)
+        .accessibilityHint(String(localized: "wishlists.row.hint"))
     }
 }
 
@@ -220,4 +252,13 @@ struct EmptyWishlistsView: View {
             .navigationTitle(String(localized: "wishlists.title"))
     }
     .withDependencies(DependencyContainer.preview)
+}
+
+#Preview("Empty Wishlists") {
+    NavigationStack {
+        EmptyWishlistsView {
+            // Create action
+        }
+        .navigationTitle(String(localized: "wishlists.title"))
+    }
 }

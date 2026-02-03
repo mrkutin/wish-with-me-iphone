@@ -2,10 +2,12 @@ import SwiftUI
 
 struct CreateWishlistView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.dataController) private var dataController
     @Environment(\.apiClient) private var apiClient
+    @Environment(\.dataController) private var dataController
     @Environment(\.authManager) private var authManager
     @Environment(\.networkMonitor) private var networkMonitor
+
+    var onWishlistCreated: ((Wishlist) -> Void)?
 
     @State private var name = ""
     @State private var description = ""
@@ -14,12 +16,15 @@ struct CreateWishlistView: View {
     @State private var isLoading = false
     @State private var errorMessage: String?
 
+    @State private var viewModel: WishlistsViewModel?
+
     var body: some View {
         NavigationStack {
             Form {
                 Section {
                     TextField(String(localized: "wishlist.field.name"), text: $name)
                         .textContentType(.none)
+                        .accessibilityLabel(String(localized: "wishlist.field.name"))
 
                     TextField(
                         String(localized: "wishlist.field.description"),
@@ -27,6 +32,7 @@ struct CreateWishlistView: View {
                         axis: .vertical
                     )
                     .lineLimit(3...6)
+                    .accessibilityLabel(String(localized: "wishlist.field.description"))
                 }
 
                 Section {
@@ -84,63 +90,54 @@ struct CreateWishlistView: View {
                     Button(String(localized: "button.create")) {
                         Task { await createWishlist() }
                     }
-                    .disabled(name.isEmpty || isLoading)
+                    .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isLoading)
                 }
             }
             .interactiveDismissDisabled(isLoading)
             .overlay {
                 if isLoading {
-                    ProgressView()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(.ultraThinMaterial)
+                    LoadingOverlay()
                 }
+            }
+            .onAppear {
+                setupViewModel()
             }
         }
     }
 
+    private func setupViewModel() {
+        if let apiClient = apiClient,
+           let dataController = dataController,
+           let networkMonitor = networkMonitor,
+           let authManager = authManager {
+            let vm = WishlistsViewModel()
+            vm.setDependencies(
+                apiClient: apiClient,
+                dataController: dataController,
+                networkMonitor: networkMonitor,
+                authManager: authManager
+            )
+            viewModel = vm
+        }
+    }
+
     private func createWishlist() async {
-        guard !name.isEmpty else { return }
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedName.isEmpty else { return }
 
         isLoading = true
         errorMessage = nil
 
-        let userId = authManager?.currentUser?.id ?? ""
-        let userName = authManager?.currentUser?.name ?? ""
-
         do {
-            // Create locally first (optimistic)
-            let wishlist = try dataController?.createWishlist(
-                name: name,
+            let wishlist = try await viewModel?.createWishlist(
+                name: trimmedName,
                 description: description.isEmpty ? nil : description,
-                dueDate: showDatePicker ? dueDate : nil,
-                userId: userId,
-                userName: userName
+                dueDate: showDatePicker ? dueDate : nil
             )
 
-            // Sync to server if online
-            if networkMonitor?.isConnected ?? false, let apiClient = apiClient {
-                let dateFormatter = ISO8601DateFormatter()
-                let dueDateString = (showDatePicker && dueDate != nil)
-                    ? dateFormatter.string(from: dueDate!)
-                    : nil
-
-                let request = CreateWishlistRequest(
-                    name: name,
-                    description: description.isEmpty ? nil : description,
-                    dueDate: dueDateString
-                )
-
-                let dto = try await apiClient.createWishlist(request)
-
-                // Update local wishlist with server response
-                if let wishlist = wishlist {
-                    wishlist.id = dto.id
-                    wishlist.sharedToken = dto.sharedToken
-                    wishlist.needsSync = false
-                    try dataController?.save()
-                }
+            if let wishlist = wishlist {
+                onWishlistCreated?(wishlist)
             }
-
             dismiss()
         } catch {
             errorMessage = error.localizedDescription
@@ -154,11 +151,13 @@ struct CreateWishlistView: View {
 
 struct EditWishlistView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.dataController) private var dataController
     @Environment(\.apiClient) private var apiClient
+    @Environment(\.dataController) private var dataController
+    @Environment(\.authManager) private var authManager
     @Environment(\.networkMonitor) private var networkMonitor
 
     let wishlist: Wishlist
+    var onWishlistUpdated: (() -> Void)?
 
     @State private var name: String
     @State private var description: String
@@ -167,8 +166,11 @@ struct EditWishlistView: View {
     @State private var isLoading = false
     @State private var errorMessage: String?
 
-    init(wishlist: Wishlist) {
+    @State private var viewModel: WishlistsViewModel?
+
+    init(wishlist: Wishlist, onWishlistUpdated: (() -> Void)? = nil) {
         self.wishlist = wishlist
+        self.onWishlistUpdated = onWishlistUpdated
         _name = State(initialValue: wishlist.name)
         _description = State(initialValue: wishlist.wishlistDescription ?? "")
         _dueDate = State(initialValue: wishlist.dueDate)
@@ -180,6 +182,7 @@ struct EditWishlistView: View {
             Form {
                 Section {
                     TextField(String(localized: "wishlist.field.name"), text: $name)
+                        .accessibilityLabel(String(localized: "wishlist.field.name"))
 
                     TextField(
                         String(localized: "wishlist.field.description"),
@@ -187,6 +190,7 @@ struct EditWishlistView: View {
                         axis: .vertical
                     )
                     .lineLimit(3...6)
+                    .accessibilityLabel(String(localized: "wishlist.field.description"))
                 }
 
                 Section {
@@ -241,46 +245,60 @@ struct EditWishlistView: View {
                     Button(String(localized: "button.save")) {
                         Task { await updateWishlist() }
                     }
-                    .disabled(name.isEmpty || isLoading)
+                    .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isLoading || !hasChanges)
                 }
             }
             .interactiveDismissDisabled(isLoading)
+            .overlay {
+                if isLoading {
+                    LoadingOverlay()
+                }
+            }
+            .onAppear {
+                setupViewModel()
+            }
+        }
+    }
+
+    private var hasChanges: Bool {
+        name != wishlist.name ||
+        description != (wishlist.wishlistDescription ?? "") ||
+        dueDate != wishlist.dueDate ||
+        showDatePicker != (wishlist.dueDate != nil)
+    }
+
+    private func setupViewModel() {
+        if let apiClient = apiClient,
+           let dataController = dataController,
+           let networkMonitor = networkMonitor,
+           let authManager = authManager {
+            let vm = WishlistsViewModel()
+            vm.setDependencies(
+                apiClient: apiClient,
+                dataController: dataController,
+                networkMonitor: networkMonitor,
+                authManager: authManager
+            )
+            viewModel = vm
         }
     }
 
     private func updateWishlist() async {
-        guard !name.isEmpty else { return }
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedName.isEmpty else { return }
 
         isLoading = true
         errorMessage = nil
 
         do {
-            // Update locally first
-            try dataController?.updateWishlist(
+            try await viewModel?.updateWishlist(
                 wishlist,
-                name: name,
+                name: trimmedName,
                 description: description.isEmpty ? nil : description,
                 dueDate: showDatePicker ? dueDate : nil
             )
 
-            // Sync to server if online
-            if networkMonitor?.isConnected ?? false, let apiClient = apiClient {
-                let dateFormatter = ISO8601DateFormatter()
-                let dueDateString = (showDatePicker && dueDate != nil)
-                    ? dateFormatter.string(from: dueDate!)
-                    : nil
-
-                let request = UpdateWishlistRequest(
-                    name: name,
-                    description: description.isEmpty ? nil : description,
-                    dueDate: dueDateString
-                )
-
-                let _ = try await apiClient.updateWishlist(id: wishlist.id, request: request)
-                wishlist.needsSync = false
-                try dataController?.save()
-            }
-
+            onWishlistUpdated?()
             dismiss()
         } catch {
             errorMessage = error.localizedDescription
@@ -295,4 +313,19 @@ struct EditWishlistView: View {
 #Preview("Create Wishlist") {
     CreateWishlistView()
         .withDependencies(DependencyContainer.preview)
+}
+
+#Preview("Edit Wishlist") {
+    EditWishlistView(
+        wishlist: Wishlist(
+            id: "1",
+            userId: "user1",
+            userName: "John",
+            name: "Birthday Wishlist",
+            wishlistDescription: "My birthday gift ideas",
+            dueDate: Date().addingTimeInterval(86400 * 30),
+            sharedToken: "token123"
+        )
+    )
+    .withDependencies(DependencyContainer.preview)
 }

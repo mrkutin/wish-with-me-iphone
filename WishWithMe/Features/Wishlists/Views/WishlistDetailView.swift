@@ -1,45 +1,24 @@
 import SwiftUI
 
 struct WishlistDetailView: View {
-    @Environment(\.dataController) private var dataController
     @Environment(\.apiClient) private var apiClient
+    @Environment(\.dataController) private var dataController
     @Environment(\.networkMonitor) private var networkMonitor
 
     let wishlist: Wishlist
     @Bindable var coordinator: WishlistsNavigationCoordinator
 
-    @State private var isLoading = false
-    @State private var showBoughtItems = true
+    @State private var viewModel: WishlistDetailViewModel
 
-    var sortedItems: [WishlistItem] {
-        wishlist.items
-            .filter { !$0.pendingDeletion }
-            .filter { showBoughtItems || !$0.bought }
-            .sorted { item1, item2 in
-                // Sort by bought status first, then by priority, then by date
-                if item1.bought != item2.bought {
-                    return !item1.bought
-                }
-                let priority1 = item1.priority?.sortOrder ?? 3
-                let priority2 = item2.priority?.sortOrder ?? 3
-                if priority1 != priority2 {
-                    return priority1 < priority2
-                }
-                return item1.createdAt > item2.createdAt
-            }
-    }
-
-    var boughtCount: Int {
-        wishlist.items.filter { $0.bought && !$0.pendingDeletion }.count
-    }
-
-    var totalCount: Int {
-        wishlist.items.filter { !$0.pendingDeletion }.count
+    init(wishlist: Wishlist, coordinator: WishlistsNavigationCoordinator) {
+        self.wishlist = wishlist
+        self.coordinator = coordinator
+        _viewModel = State(initialValue: WishlistDetailViewModel(wishlist: wishlist))
     }
 
     var body: some View {
         Group {
-            if wishlist.items.isEmpty {
+            if viewModel.isEmpty {
                 EmptyItemsView {
                     coordinator.showAddItem(to: wishlist)
                 }
@@ -51,152 +30,254 @@ struct WishlistDetailView: View {
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Menu {
-                    Button {
-                        coordinator.showAddItem(to: wishlist)
-                    } label: {
-                        Label(String(localized: "item.add"), systemImage: "plus")
-                    }
-
-                    Button {
-                        coordinator.showEditWishlist(wishlist)
-                    } label: {
-                        Label(String(localized: "wishlist.edit"), systemImage: "pencil")
-                    }
-
-                    Button {
-                        coordinator.showShareWishlist(wishlist)
-                    } label: {
-                        Label(String(localized: "button.share"), systemImage: "square.and.arrow.up")
-                    }
-
-                    Divider()
-
-                    Toggle(isOn: $showBoughtItems) {
-                        Label(String(localized: "items.showBought"), systemImage: "checkmark.circle")
-                    }
-                } label: {
-                    Image(systemName: "ellipsis.circle")
-                }
+                toolbarMenu
             }
         }
         .refreshable {
-            await refreshWishlist()
+            await viewModel.refreshWishlist()
+        }
+        .onAppear {
+            setupDependencies()
+        }
+        .overlay(alignment: .top) {
+            if viewModel.isOffline {
+                offlineBanner
+            }
         }
     }
+
+    // MARK: - Toolbar Menu
+
+    private var toolbarMenu: some View {
+        Menu {
+            Button {
+                coordinator.showAddItem(to: wishlist)
+            } label: {
+                Label(String(localized: "item.add"), systemImage: "plus")
+            }
+
+            Button {
+                coordinator.showEditWishlist(wishlist)
+            } label: {
+                Label(String(localized: "wishlist.edit"), systemImage: "pencil")
+            }
+
+            Button {
+                coordinator.showShareWishlist(wishlist)
+            } label: {
+                Label(String(localized: "button.share"), systemImage: "square.and.arrow.up")
+            }
+
+            Divider()
+
+            // Sort options
+            Menu {
+                ForEach(ItemSortOption.allCases, id: \.self) { option in
+                    Button {
+                        if viewModel.sortOption == option {
+                            viewModel.sortAscending.toggle()
+                        } else {
+                            viewModel.sortOption = option
+                            viewModel.sortAscending = true
+                        }
+                    } label: {
+                        HStack {
+                            Text(option.displayName)
+                            if viewModel.sortOption == option {
+                                Image(systemName: viewModel.sortAscending ? "chevron.up" : "chevron.down")
+                            }
+                        }
+                    }
+                }
+            } label: {
+                Label(String(localized: "items.sort"), systemImage: "arrow.up.arrow.down")
+            }
+
+            Toggle(isOn: $viewModel.showBoughtItems) {
+                Label(String(localized: "items.showBought"), systemImage: "checkmark.circle")
+            }
+        } label: {
+            Image(systemName: "ellipsis.circle")
+        }
+    }
+
+    // MARK: - Items List
 
     private var itemsList: some View {
         List {
             // Progress Section
-            Section {
-                HStack {
-                    Text(String(localized: "items.progress"))
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+            progressSection
 
-                    Spacer()
-
-                    Text("\(boughtCount)/\(totalCount)")
-                        .font(.subheadline.bold())
-                        .foregroundStyle(Color.appPrimary)
-                }
-
-                ProgressView(value: Double(boughtCount), total: Double(max(totalCount, 1)))
-                    .tint(Color.appPrimary)
+            // Price Summary Section
+            if viewModel.totalPrice > 0 || viewModel.totalBoughtPrice > 0 {
+                priceSummarySection
             }
 
             // Items Section
-            Section {
-                ForEach(sortedItems) { item in
-                    Button {
-                        coordinator.navigateToItemDetail(item)
-                    } label: {
-                        ItemRowView(item: item)
-                    }
-                    .buttonStyle(.plain)
-                    .swipeActions(edge: .leading) {
-                        Button {
-                            toggleItemBought(item)
-                        } label: {
-                            Label(
-                                item.bought
-                                    ? String(localized: "item.markUnbought")
-                                    : String(localized: "item.markBought"),
-                                systemImage: item.bought ? "xmark.circle" : "checkmark.circle"
-                            )
-                        }
-                        .tint(item.bought ? .orange : Color.appSuccess)
-                    }
-                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        Button(role: .destructive) {
-                            deleteItem(item)
-                        } label: {
-                            Label(String(localized: "button.delete"), systemImage: "trash")
-                        }
-
-                        Button {
-                            coordinator.showEditItem(item)
-                        } label: {
-                            Label(String(localized: "button.edit"), systemImage: "pencil")
-                        }
-                        .tint(Color.appPrimary)
-                    }
-                }
-            } header: {
-                Text(String(localized: "items.section.title"))
-            }
+            itemsSection
         }
         .listStyle(.insetGrouped)
     }
 
-    private func refreshWishlist() async {
-        guard let apiClient = apiClient else { return }
+    // MARK: - Progress Section
 
-        isLoading = true
-        defer { isLoading = false }
+    private var progressSection: some View {
+        Section {
+            HStack {
+                Text(String(localized: "items.progress"))
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
 
-        do {
-            let dto = try await apiClient.getWishlist(id: wishlist.id)
-            try dataController?.saveWishlist(dto)
-        } catch {
-            // Silently fail for refresh - user still sees cached data
+                Spacer()
+
+                Text("\(viewModel.boughtCount)/\(viewModel.totalCount)")
+                    .font(.subheadline.bold())
+                    .foregroundStyle(Color.appPrimary)
+            }
+
+            ProgressView(value: viewModel.progress)
+                .tint(Color.appPrimary)
         }
     }
 
-    private func toggleItemBought(_ item: WishlistItem) {
-        Task {
-            try? dataController?.toggleItemBought(item)
+    // MARK: - Price Summary Section
 
-            if networkMonitor?.isConnected ?? false {
-                let request = UpdateItemRequest(
-                    name: nil,
-                    description: nil,
-                    url: nil,
-                    price: nil,
-                    currency: nil,
-                    image: nil,
-                    bought: item.bought,
-                    priority: nil,
-                    notes: nil
-                )
-                try? await apiClient?.updateItem(
-                    wishlistId: wishlist.id,
-                    itemId: item.id,
-                    request: request
-                )
+    private var priceSummarySection: some View {
+        Section {
+            if viewModel.totalPrice > 0 {
+                HStack {
+                    Text(String(localized: "items.totalRemaining"))
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Text(formatPrice(viewModel.totalPrice))
+                        .font(.subheadline.bold())
+                        .foregroundStyle(Color.appPrimary)
+                }
             }
+
+            if viewModel.totalBoughtPrice > 0 {
+                HStack {
+                    Text(String(localized: "items.totalBought"))
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Text(formatPrice(viewModel.totalBoughtPrice))
+                        .font(.subheadline)
+                        .foregroundStyle(Color.appSuccess)
+                }
+            }
+        }
+    }
+
+    // MARK: - Items Section
+
+    private var itemsSection: some View {
+        Section {
+            ForEach(viewModel.sortedItems) { item in
+                Button {
+                    coordinator.navigateToItemDetail(item)
+                } label: {
+                    ItemRowView(item: item)
+                }
+                .buttonStyle(.plain)
+                .swipeActions(edge: .leading) {
+                    Button {
+                        Task {
+                            await viewModel.toggleItemBought(item)
+                        }
+                    } label: {
+                        Label(
+                            item.bought
+                                ? String(localized: "item.markUnbought")
+                                : String(localized: "item.markBought"),
+                            systemImage: item.bought ? "xmark.circle" : "checkmark.circle"
+                        )
+                    }
+                    .tint(item.bought ? .orange : Color.appSuccess)
+                }
+                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                    Button(role: .destructive) {
+                        deleteItem(item)
+                    } label: {
+                        Label(String(localized: "button.delete"), systemImage: "trash")
+                    }
+
+                    Button {
+                        coordinator.showEditItem(item)
+                    } label: {
+                        Label(String(localized: "button.edit"), systemImage: "pencil")
+                    }
+                    .tint(Color.appPrimary)
+                }
+            }
+        } header: {
+            HStack {
+                Text(String(localized: "items.section.title"))
+                Spacer()
+                if viewModel.hasUnsyncedChanges {
+                    Image(systemName: "arrow.triangle.2.circlepath")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+    }
+
+    // MARK: - Offline Banner
+
+    private var offlineBanner: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "wifi.slash")
+            Text(String(localized: "offline.banner"))
+        }
+        .font(.footnote.bold())
+        .foregroundStyle(.white)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+        .background(Color.appWarning)
+        .clipShape(Capsule())
+        .padding(.top, 8)
+        .transition(.move(edge: .top).combined(with: .opacity))
+        .animation(.easeInOut, value: viewModel.isOffline)
+    }
+
+    // MARK: - Helpers
+
+    private func formatPrice(_ price: Double) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencyCode = "RUB" // Default to RUB for wishlist total
+        return formatter.string(from: NSNumber(value: price)) ?? "\(price)"
+    }
+
+    // MARK: - Actions
+
+    private func setupDependencies() {
+        if let apiClient = apiClient,
+           let dataController = dataController,
+           let networkMonitor = networkMonitor {
+            viewModel.setDependencies(
+                apiClient: apiClient,
+                dataController: dataController,
+                networkMonitor: networkMonitor
+            )
         }
     }
 
     private func deleteItem(_ item: WishlistItem) {
-        Task {
-            try? dataController?.markItemForDeletion(item)
-
-            if networkMonitor?.isConnected ?? false {
-                try? await apiClient?.deleteItem(wishlistId: wishlist.id, itemId: item.id)
-                try? dataController?.deleteItem(item)
-            }
-        }
+        coordinator.showAlert(
+            AlertItem.confirmation(
+                title: String(localized: "item.delete.title"),
+                message: String(localized: "item.delete.message"),
+                confirmTitle: String(localized: "button.delete"),
+                onConfirm: {
+                    Task {
+                        try? await viewModel.deleteItem(item)
+                    }
+                }
+            )
+        )
     }
 }
 
@@ -252,6 +333,9 @@ struct ItemRowView: View {
                 .foregroundStyle(.tertiary)
         }
         .padding(.vertical, 4)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(item.name)
+        .accessibilityValue(item.bought ? String(localized: "item.status.bought") : String(localized: "item.status.available"))
     }
 
     private func formatPrice(_ price: Double, currency: String?) -> String {
@@ -349,4 +433,13 @@ struct EmptyItemsView: View {
         )
     }
     .withDependencies(DependencyContainer.preview)
+}
+
+#Preview("Empty Items") {
+    NavigationStack {
+        EmptyItemsView {
+            // Add action
+        }
+        .navigationTitle("Birthday Wishlist")
+    }
 }

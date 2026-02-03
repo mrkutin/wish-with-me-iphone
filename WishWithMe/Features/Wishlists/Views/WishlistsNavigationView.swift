@@ -48,6 +48,7 @@ struct WishlistsNavigationView: View {
                     } label: {
                         Image(systemName: "plus")
                     }
+                    .accessibilityLabel(String(localized: "wishlists.create"))
                 }
             }
             .navigationDestination(for: WishlistsDestination.self) { destination in
@@ -61,9 +62,9 @@ struct WishlistsNavigationView: View {
                 case .editWishlist(let wishlist):
                     EditWishlistView(wishlist: wishlist)
                 case .addItem(let wishlist):
-                    AddItemView(wishlist: wishlist)
+                    AddItemSheet(wishlist: wishlist)
                 case .editItem(let item):
-                    EditItemView(item: item)
+                    EditItemSheet(item: item)
                 case .shareWishlist(let wishlist):
                     ShareWishlistView(wishlist: wishlist)
                 }
@@ -100,9 +101,9 @@ struct WishlistsNavigationView: View {
         case .editWishlist(let wishlist):
             EditWishlistView(wishlist: wishlist)
         case .addItem(let wishlist):
-            AddItemView(wishlist: wishlist)
+            AddItemSheet(wishlist: wishlist)
         case .editItem(let item):
-            EditItemView(item: item)
+            EditItemSheet(item: item)
         case .shareWishlist(let wishlist):
             ShareWishlistView(wishlist: wishlist)
         case .followWishlist(let token):
@@ -122,61 +123,105 @@ struct WishlistsNavigationView: View {
     }
 }
 
-// MARK: - Placeholder Views (to be implemented)
-
-struct AddItemView: View {
-    @Environment(\.dismiss) private var dismiss
-    let wishlist: Wishlist
-
-    var body: some View {
-        NavigationStack {
-            Text("Add Item - Coming Soon")
-                .navigationTitle(String(localized: "item.add"))
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button(String(localized: "button.cancel")) {
-                            dismiss()
-                        }
-                    }
-                }
-        }
-    }
-}
-
-struct EditItemView: View {
-    @Environment(\.dismiss) private var dismiss
-    let item: WishlistItem
-
-    var body: some View {
-        NavigationStack {
-            Text("Edit Item - Coming Soon")
-                .navigationTitle(String(localized: "item.edit"))
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button(String(localized: "button.cancel")) {
-                            dismiss()
-                        }
-                    }
-                }
-        }
-    }
-}
+// MARK: - Share Wishlist View
 
 struct ShareWishlistView: View {
     @Environment(\.dismiss) private var dismiss
     let wishlist: Wishlist
 
+    @State private var isCopied = false
+
+    private var shareURL: URL? {
+        URL(string: "https://wishwith.me/wishlists/follow/\(wishlist.sharedToken)")
+    }
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 24) {
-                Text("Share Wishlist - Coming Soon")
+                // QR Code placeholder
+                VStack(spacing: 16) {
+                    Image(systemName: "qrcode")
+                        .font(.system(size: 120))
+                        .foregroundStyle(Color.appPrimary)
 
-                Text("Token: \(wishlist.sharedToken)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    Text(String(localized: "share.qrcode.hint"))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .padding()
+                .background(Color.appSecondaryBackground)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+
+                // Share Link
+                VStack(spacing: 12) {
+                    Text(String(localized: "share.link.title"))
+                        .font(.headline)
+
+                    if let url = shareURL {
+                        Text(url.absoluteString)
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(2)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                    }
+
+                    HStack(spacing: 16) {
+                        // Copy Link
+                        Button {
+                            if let url = shareURL {
+                                UIPasteboard.general.string = url.absoluteString
+                                withAnimation {
+                                    isCopied = true
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    withAnimation {
+                                        isCopied = false
+                                    }
+                                }
+                            }
+                        } label: {
+                            Label(
+                                isCopied
+                                    ? String(localized: "share.copied")
+                                    : String(localized: "share.copyLink"),
+                                systemImage: isCopied ? "checkmark" : "doc.on.doc"
+                            )
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(isCopied ? Color.appSuccess : Color.appPrimary)
+                            .foregroundStyle(.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                        }
+
+                        // System Share
+                        if let url = shareURL {
+                            ShareLink(item: url) {
+                                Image(systemName: "square.and.arrow.up")
+                                    .font(.title2)
+                                    .frame(width: 50, height: 50)
+                                    .background(Color.appSecondaryBackground)
+                                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                            }
+                        }
+                    }
+                }
+
+                Spacer()
+
+                // Info
+                VStack(spacing: 8) {
+                    Image(systemName: "info.circle")
+                        .foregroundStyle(.secondary)
+
+                    Text(String(localized: "share.info"))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
             }
+            .padding()
             .navigationTitle(String(localized: "share.title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -190,29 +235,190 @@ struct ShareWishlistView: View {
     }
 }
 
+// MARK: - Follow Wishlist View
+
 struct FollowWishlistView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.apiClient) private var apiClient
+    @Environment(\.dataController) private var dataController
+
     let token: String
+
+    @State private var isLoading = true
+    @State private var wishlist: WishlistDTO?
+    @State private var error: AppError?
+    @State private var isFollowing = false
 
     var body: some View {
         NavigationStack {
-            Text("Follow Wishlist - Coming Soon")
-                .navigationTitle(String(localized: "wishlists.follow.title"))
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button(String(localized: "button.cancel")) {
-                            dismiss()
-                        }
+            Group {
+                if isLoading {
+                    LoadingView()
+                } else if let error = error {
+                    errorView(error)
+                } else if let wishlist = wishlist {
+                    wishlistPreview(wishlist)
+                }
+            }
+            .navigationTitle(String(localized: "wishlists.follow.title"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(String(localized: "button.cancel")) {
+                        dismiss()
                     }
                 }
+            }
+            .task {
+                await loadWishlist()
+            }
         }
     }
+
+    private func errorView(_ error: AppError) -> some View {
+        ContentUnavailableView {
+            Label(error.title, systemImage: "exclamationmark.triangle")
+        } description: {
+            Text(error.message)
+        } actions: {
+            if error.isRetryable {
+                Button(String(localized: "button.retry")) {
+                    Task {
+                        await loadWishlist()
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+            }
+        }
+    }
+
+    private func wishlistPreview(_ wishlist: WishlistDTO) -> some View {
+        VStack(spacing: 24) {
+            // Wishlist Info
+            VStack(spacing: 16) {
+                Image(systemName: "gift.fill")
+                    .font(.system(size: 48))
+                    .foregroundStyle(Color.appPrimary)
+
+                Text(wishlist.name)
+                    .font(.title2.bold())
+
+                Text(String(localized: "wishlists.follow.by \(wishlist.userName)"))
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                if let description = wishlist.description, !description.isEmpty {
+                    Text(description)
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+
+                HStack(spacing: 16) {
+                    Label(
+                        "\(wishlist.items?.count ?? 0)",
+                        systemImage: "gift"
+                    )
+
+                    if let dueDate = wishlist.dueDate {
+                        Label(
+                            dueDate,
+                            systemImage: "calendar"
+                        )
+                    }
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            }
+            .padding()
+            .background(Color.appSecondaryBackground)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+
+            Spacer()
+
+            // Follow Button
+            Button {
+                Task {
+                    await followWishlist()
+                }
+            } label: {
+                HStack {
+                    if isFollowing {
+                        ProgressView()
+                            .tint(.white)
+                    } else {
+                        Image(systemName: "plus.circle")
+                        Text(String(localized: "wishlists.follow.button"))
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.appPrimary)
+                .foregroundStyle(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+            .disabled(isFollowing)
+        }
+        .padding()
+    }
+
+    private func loadWishlist() async {
+        isLoading = true
+        error = nil
+
+        guard let apiClient = apiClient else {
+            error = .unknown
+            isLoading = false
+            return
+        }
+
+        do {
+            wishlist = try await apiClient.getWishlistByToken(token)
+        } catch {
+            self.error = AppError(from: error)
+        }
+
+        isLoading = false
+    }
+
+    private func followWishlist() async {
+        guard let apiClient = apiClient else { return }
+
+        isFollowing = true
+
+        do {
+            let dto = try await apiClient.followWishlist(token: token)
+            try dataController?.saveWishlist(dto)
+            dismiss()
+        } catch {
+            self.error = AppError(from: error)
+        }
+
+        isFollowing = false
+    }
 }
+
 
 // MARK: - Preview
 
 #Preview("Wishlists Navigation") {
     WishlistsNavigationView()
+        .withDependencies(DependencyContainer.preview)
+}
+
+#Preview("Share Wishlist") {
+    ShareWishlistView(
+        wishlist: Wishlist(
+            id: "1",
+            userId: "user1",
+            userName: "John",
+            name: "Birthday Wishlist",
+            sharedToken: "abc123"
+        )
+    )
+}
+
+#Preview("Follow Wishlist") {
+    FollowWishlistView(token: "abc123")
         .withDependencies(DependencyContainer.preview)
 }
