@@ -12,6 +12,8 @@ final class DependencyContainer: ObservableObject {
     let authManager: AuthManager
     let apiClient: APIClient
     let dataController: DataController
+    let operationQueue: OperationQueueManager
+    let syncEngine: SyncEngine
 
     // MARK: - Initialization
 
@@ -22,6 +24,8 @@ final class DependencyContainer: ObservableObject {
         self.authManager = AuthManager(keychainService: keychainService)
         self.apiClient = APIClient()
         self.dataController = DataController(inMemory: inMemory)
+        self.operationQueue = OperationQueueManager(dataController: dataController)
+        self.syncEngine = SyncEngine()
 
         // Set up dependencies
         Task {
@@ -29,8 +33,19 @@ final class DependencyContainer: ObservableObject {
         }
         authManager.setAPIClient(apiClient)
 
+        // Configure sync engine
+        syncEngine.configure(
+            apiClient: apiClient,
+            dataController: dataController,
+            networkMonitor: networkMonitor,
+            operationQueue: operationQueue
+        )
+
         // Start network monitoring
         networkMonitor.startMonitoring()
+
+        // Start sync engine monitoring
+        syncEngine.startMonitoring()
     }
 
     // MARK: - Preview Container
@@ -62,6 +77,14 @@ private struct NetworkMonitorKey: EnvironmentKey {
     static let defaultValue: NetworkMonitor? = nil
 }
 
+private struct SyncEngineKey: EnvironmentKey {
+    @MainActor static let defaultValue: SyncEngine? = nil
+}
+
+private struct OperationQueueKey: EnvironmentKey {
+    @MainActor static let defaultValue: OperationQueueManager? = nil
+}
+
 // MARK: - Environment Values Extension
 
 extension EnvironmentValues {
@@ -89,6 +112,16 @@ extension EnvironmentValues {
         get { self[NetworkMonitorKey.self] }
         set { self[NetworkMonitorKey.self] = newValue }
     }
+
+    var syncEngine: SyncEngine? {
+        get { self[SyncEngineKey.self] }
+        set { self[SyncEngineKey.self] = newValue }
+    }
+
+    var operationQueue: OperationQueueManager? {
+        get { self[OperationQueueKey.self] }
+        set { self[OperationQueueKey.self] = newValue }
+    }
 }
 
 // MARK: - View Extension for Dependency Injection
@@ -101,6 +134,8 @@ extension View {
             .environment(\.apiClient, container.apiClient)
             .environment(\.dataController, container.dataController)
             .environment(\.networkMonitor, container.networkMonitor)
+            .environment(\.syncEngine, container.syncEngine)
+            .environment(\.operationQueue, container.operationQueue)
             .environmentObject(container)
     }
 }

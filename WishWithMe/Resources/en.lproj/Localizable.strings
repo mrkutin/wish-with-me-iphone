@@ -74,6 +74,24 @@
 
 /* Share */
 "share.title" = "Share Wishlist";
+"share.tab.link" = "Link";
+"share.tab.qrcode" = "QR Code";
+"share.link.title" = "Share Link";
+"share.link.description" = "Share this link with friends and family to let them see your wishlist.";
+"share.copyLink" = "Copy Link";
+"share.linkCopied" = "Link Copied!";
+"share.info" = "Anyone with this link can view your wishlist and mark items as bought.";
+"share.items" = "items";
+"share.followers" = "followers";
+"share.qrcode.title" = "QR Code";
+"share.qrcode.description" = "Scan this QR code to open the wishlist.";
+"share.qrcode.scanHint" = "Scan to view wishlist";
+"share.qrcode.save" = "Save to Photos";
+"share.qrcode.saved" = "Saved!";
+"share.qrcode.saveError.title" = "Save Failed";
+"share.qrcode.saveError.message" = "Could not save QR code to photos. Please check your permissions.";
+"share.qrcode.hint" = "Scan this QR code to view the wishlist";
+"share.copied" = "Copied!";
 
 /* Profile */
 "profile.title" = "Profile";
@@ -153,6 +171,28 @@
 "network.connected" = "Connected";
 "network.offline" = "Offline";
 "offline.banner" = "You're offline. Changes will sync when connected.";
+
+/* Sync */
+"sync.inProgress" = "Syncing...";
+"sync.pending %lld" = "%lld pending changes";
+"sync.lastSync" = "Last synced";
+"sync.error.offline" = "Cannot sync while offline";
+"sync.error.notConfigured" = "Sync engine not configured";
+"sync.error.invalidPayload" = "Invalid sync data";
+"sync.error.missingParentId" = "Missing parent reference";
+
+/* Follow */
+"follow.title" = "Follow Wishlist";
+"follow.loading" = "Loading wishlist...";
+"follow.by" = "by";
+"follow.items" = "items";
+"follow.dueDate" = "Due Date";
+"follow.followers" = "followers";
+"follow.itemsPreview" = "Items";
+"follow.moreItems %lld" = "+%lld more items";
+"follow.button" = "Follow Wishlist";
+"follow.hint" = "You'll be able to see updates and mark items as bought.";
+"follow.success" = "Following!";
 
 /* Loading */
 "loading" = "Loading...";

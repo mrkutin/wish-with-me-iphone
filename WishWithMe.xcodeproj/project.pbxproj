@@ -12,7 +12,9 @@
 		05CE6645BFCB907AB44EFB05 /* WishlistsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967FC424AD86EA4A44EF0E22 /* WishlistsViewModel.swift */; };
 		0E181F5C93956193A9C973FF /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = A41A08958997463913990A50 /* KeychainAccess */; };
 		12A5BE09CB21185E95ED9FB0 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C21B8616902E9B9FD34052 /* DataController.swift */; };
+		1596B52DE7A64972A2406EA9 /* ShareWishlistSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F7FE21EDD6D5A825BCA848F /* ShareWishlistSheet.swift */; };
 		166315834731EC0D5BFCC7B3 /* ProfileNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BA4BE8869DDA860F2CDC0B0 /* ProfileNavigationView.swift */; };
+		18045F90BF3886BFAB52FD19 /* OperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C418B0D9C3A67A5A0CCE77 /* OperationQueue.swift */; };
 		1F63CD599174028CBADF9C1D /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02D679C1CAA712E5A796A2D /* APIClient.swift */; };
 		2FCA09904E37622149AB383E /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24551B7907A39CD81A73FFF3 /* ProfileView.swift */; };
 		33558C0C2EF046442E9ACA0D /* WishlistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E20E2D3670EC6441129DDC /* WishlistsView.swift */; };
@@ -22,16 +24,19 @@
 		47D4493F9E160DE8EEB1DC78 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FDAF2FB01DE142F18F19867A /* Assets.xcassets */; };
 		51A48FED941BF96B2D6AAB05 /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2A8057238F424BAF08373C /* DependencyContainer.swift */; };
 		54C0AA9BA2B59453E3817D10 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 60E8F52D8982761F7A1EB8AA /* Kingfisher */; };
+		595BC1F87F1F25AA9324CA88 /* FollowWishlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F60578F603150120FFE5A7 /* FollowWishlistView.swift */; };
 		5C508646A400E1E62B8C57FB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34A17F0E36E2800CEE4C1EF7 /* Localizable.strings */; };
 		629ED2B3450601D44A198638 /* ViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4447E5509AEBF331CBB411 /* ViewState.swift */; };
 		6BA5811E25A1FFE9561B4CF2 /* WishlistItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2206A0889E47DAA18C0E152 /* WishlistItem.swift */; };
 		73F30B4E6B60CF3116847B92 /* NavigationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D2DD0C7810392F2C93C6AD /* NavigationCoordinator.swift */; };
 		78A07E078298173B4568D644 /* Color+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B8FA5B755FDF7BFCF54261 /* Color+App.swift */; };
 		7F77D5CD9F7AB0B15BFCBB7E /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBE25304F9D3E405E1D5080 /* AuthenticationView.swift */; };
+		856ED29DB58D3A888A901937 /* SharingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BD912B80A27E9435FF7D53 /* SharingViewModel.swift */; };
 		86C605F5CD3C70658CE4D557 /* SharedWishlistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D56D4E5E4D1A5AAD33E9AE0 /* SharedWishlistsView.swift */; };
 		8D92D77886EFD314FE64A277 /* OAuthHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D448476AB090CE60C6442123 /* OAuthHandler.swift */; };
 		8EE52BACC339084679433C7F /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60CB3F316EFAEEEBFE70279 /* NetworkMonitor.swift */; };
 		9C22DE6FC46EA1F9B98169BA /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B3A223C45845C16B35F2C30 /* MainTabView.swift */; };
+		B00CFF8D836896279CA1DDBB /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35E04B583B834E53846B4035 /* SyncEngine.swift */; };
 		B561EB6EF0CA5D1543435B78 /* CreateWishlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BC14B0E67137307DF590E7 /* CreateWishlistView.swift */; };
 		B5A7DCD4C936079009EEAFFB /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2521743D429F223440C3ABB6 /* KeychainService.swift */; };
 		B5D9360CEA5ACF1559245BF7 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16BC562E14227077EF35DD1 /* RootView.swift */; };
@@ -40,6 +45,7 @@
 		C384FA8A66F69A94B82E2C9B /* WishlistDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB3057F45F4E3DBFC313FCAF /* WishlistDetailViewModel.swift */; };
 		CD815A7D6681D214DF4182E4 /* WishWithMeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577CEA9ECA0C1D62FC4EDA9 /* WishWithMeApp.swift */; };
 		D2ADC2020EAE8C0622EFB4E6 /* ItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A60C58DC8001A2EBEEDAE3 /* ItemViewModel.swift */; };
+		DA64F1A497093C4D26D900BB /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C469CB4CCA982B8916127C7D /* QRCodeView.swift */; };
 		DDE833985392AF1756975F93 /* WishlistDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD82CFF837699A1D238F2EF /* WishlistDetailView.swift */; };
 		E979080C1635096447D3CCCD /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070ED48B3C2C08ABFD78B7FB /* APIEndpoint.swift */; };
 		EE903A88552FFFA99DA05AE8 /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AB3160A1ABBDFC2B463D17 /* APIError.swift */; };
@@ -78,7 +84,9 @@
 		2BA4BE8869DDA860F2CDC0B0 /* ProfileNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNavigationView.swift; sourceTree = "<group>"; };
 		2CD82CFF837699A1D238F2EF /* WishlistDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishlistDetailView.swift; sourceTree = "<group>"; };
 		31AB3160A1ABBDFC2B463D17 /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
+		35E04B583B834E53846B4035 /* SyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
 		36FF39E49B902A2CB75F84BF /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		38F60578F603150120FFE5A7 /* FollowWishlistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowWishlistView.swift; sourceTree = "<group>"; };
 		4B3A223C45845C16B35F2C30 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		50DB029165CCABD833F2CA48 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5C4FD76D1033597C689715CF /* Wishlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wishlist.swift; sourceTree = "<group>"; };
@@ -88,7 +96,9 @@
 		6BF011ADA276AEE36EEA294D /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		6C9DC7BE41D85CCF2B0A604C /* WishWithMeTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = WishWithMeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CBE25304F9D3E405E1D5080 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
+		6F7FE21EDD6D5A825BCA848F /* ShareWishlistSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareWishlistSheet.swift; sourceTree = "<group>"; };
 		75ACFE9A8508D8785B5E1BC3 /* WishWithMe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WishWithMe.entitlements; sourceTree = "<group>"; };
+		77C418B0D9C3A67A5A0CCE77 /* OperationQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationQueue.swift; sourceTree = "<group>"; };
 		7F0B4C7BC8F8A9E208E37120 /* WishWithMe.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = WishWithMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BA37DA5C12196202ABA0D5D /* AddItemSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemSheet.swift; sourceTree = "<group>"; };
 		94C21B8616902E9B9FD34052 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
@@ -99,6 +109,8 @@
 		B16BC562E14227077EF35DD1 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		B3E20E2D3670EC6441129DDC /* WishlistsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishlistsView.swift; sourceTree = "<group>"; };
 		C3BC14B0E67137307DF590E7 /* CreateWishlistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateWishlistView.swift; sourceTree = "<group>"; };
+		C469CB4CCA982B8916127C7D /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
+		C5BD912B80A27E9435FF7D53 /* SharingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingViewModel.swift; sourceTree = "<group>"; };
 		C60CB3F316EFAEEEBFE70279 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		C68193E31E9CEEA351CC730E /* ItemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailView.swift; sourceTree = "<group>"; };
 		D448476AB090CE60C6442123 /* OAuthHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthHandler.swift; sourceTree = "<group>"; };
@@ -208,6 +220,7 @@
 		4A0E54B403BC8DDF974E38A7 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				C5BD912B80A27E9435FF7D53 /* SharingViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -257,6 +270,9 @@
 		704C135217A899ABAE70C482 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				38F60578F603150120FFE5A7 /* FollowWishlistView.swift */,
+				C469CB4CCA982B8916127C7D /* QRCodeView.swift */,
+				6F7FE21EDD6D5A825BCA848F /* ShareWishlistSheet.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -284,6 +300,8 @@
 			isa = PBXGroup;
 			children = (
 				94C21B8616902E9B9FD34052 /* DataController.swift */,
+				77C418B0D9C3A67A5A0CCE77 /* OperationQueue.swift */,
+				35E04B583B834E53846B4035 /* SyncEngine.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -632,6 +650,7 @@
 				12A5BE09CB21185E95ED9FB0 /* DataController.swift in Sources */,
 				51A48FED941BF96B2D6AAB05 /* DependencyContainer.swift in Sources */,
 				F80397445F2D6C6D05700CAD /* EditProfileView.swift in Sources */,
+				595BC1F87F1F25AA9324CA88 /* FollowWishlistView.swift in Sources */,
 				B89047D20BA2F3A5537CB435 /* ItemDetailView.swift in Sources */,
 				D2ADC2020EAE8C0622EFB4E6 /* ItemViewModel.swift in Sources */,
 				B5A7DCD4C936079009EEAFFB /* KeychainService.swift in Sources */,
@@ -639,11 +658,16 @@
 				73F30B4E6B60CF3116847B92 /* NavigationCoordinator.swift in Sources */,
 				8EE52BACC339084679433C7F /* NetworkMonitor.swift in Sources */,
 				8D92D77886EFD314FE64A277 /* OAuthHandler.swift in Sources */,
+				18045F90BF3886BFAB52FD19 /* OperationQueue.swift in Sources */,
 				166315834731EC0D5BFCC7B3 /* ProfileNavigationView.swift in Sources */,
 				2FCA09904E37622149AB383E /* ProfileView.swift in Sources */,
+				DA64F1A497093C4D26D900BB /* QRCodeView.swift in Sources */,
 				B5D9360CEA5ACF1559245BF7 /* RootView.swift in Sources */,
 				41D5AC089F9B06ADBC2F752C /* SettingsView.swift in Sources */,
+				1596B52DE7A64972A2406EA9 /* ShareWishlistSheet.swift in Sources */,
 				86C605F5CD3C70658CE4D557 /* SharedWishlistsView.swift in Sources */,
+				856ED29DB58D3A888A901937 /* SharingViewModel.swift in Sources */,
+				B00CFF8D836896279CA1DDBB /* SyncEngine.swift in Sources */,
 				BB971E1E98328A60BAFB8654 /* SyncOperation.swift in Sources */,
 				003BF18315D7A8A5C765B139 /* User.swift in Sources */,
 				629ED2B3450601D44A198638 /* ViewState.swift in Sources */,

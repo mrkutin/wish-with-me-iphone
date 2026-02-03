@@ -74,6 +74,24 @@
 
 /* Share */
 "share.title" = "Поделиться списком";
+"share.tab.link" = "Ссылка";
+"share.tab.qrcode" = "QR-код";
+"share.link.title" = "Поделиться ссылкой";
+"share.link.description" = "Поделитесь ссылкой с друзьями и семьёй, чтобы они могли видеть ваш список.";
+"share.copyLink" = "Копировать ссылку";
+"share.linkCopied" = "Ссылка скопирована!";
+"share.info" = "Любой с этой ссылкой сможет просматривать ваш список и отмечать товары купленными.";
+"share.items" = "товаров";
+"share.followers" = "подписчиков";
+"share.qrcode.title" = "QR-код";
+"share.qrcode.description" = "Отсканируйте этот QR-код, чтобы открыть список.";
+"share.qrcode.scanHint" = "Сканируйте для просмотра списка";
+"share.qrcode.save" = "Сохранить в фото";
+"share.qrcode.saved" = "Сохранено!";
+"share.qrcode.saveError.title" = "Ошибка сохранения";
+"share.qrcode.saveError.message" = "Не удалось сохранить QR-код. Проверьте разрешения.";
+"share.qrcode.hint" = "Отсканируйте этот QR-код для просмотра списка";
+"share.copied" = "Скопировано!";
 
 /* Profile */
 "profile.title" = "Профиль";
@@ -153,6 +171,28 @@
 "network.connected" = "Подключено";
 "network.offline" = "Нет сети";
 "offline.banner" = "Нет сети. Изменения синхронизируются при подключении.";
+
+/* Sync */
+"sync.inProgress" = "Синхронизация...";
+"sync.pending %lld" = "%lld ожидающих изменений";
+"sync.lastSync" = "Последняя синхронизация";
+"sync.error.offline" = "Невозможно синхронизировать без сети";
+"sync.error.notConfigured" = "Синхронизация не настроена";
+"sync.error.invalidPayload" = "Неверные данные синхронизации";
+"sync.error.missingParentId" = "Отсутствует родительская ссылка";
+
+/* Follow */
+"follow.title" = "Подписаться на список";
+"follow.loading" = "Загрузка списка...";
+"follow.by" = "от";
+"follow.items" = "товаров";
+"follow.dueDate" = "Дата события";
+"follow.followers" = "подписчиков";
+"follow.itemsPreview" = "Товары";
+"follow.moreItems %lld" = "+%lld ещё";
+"follow.button" = "Подписаться";
+"follow.hint" = "Вы сможете видеть обновления и отмечать товары купленными.";
+"follow.success" = "Подписано!";
 
 /* Loading */
 "loading" = "Загрузка...";
