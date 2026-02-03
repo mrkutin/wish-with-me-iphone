@@ -1,0 +1,182 @@
+/* Tabs */
+"tab.wishlists" = "Wishlists";
+"tab.profile" = "Profile";
+
+/* Auth */
+"auth.login.subtitle" = "Sign in to manage your wishlists";
+"auth.signup.subtitle" = "Create an account to get started";
+"auth.field.name" = "Name";
+"auth.field.email" = "Email";
+"auth.field.password" = "Password";
+"auth.button.login" = "Sign In";
+"auth.button.signup" = "Create Account";
+"auth.divider.or" = "or continue with";
+"auth.oauth.google" = "Continue with Google";
+"auth.oauth.yandex" = "Continue with Yandex";
+"auth.toggle.signup" = "Don't have an account? Sign up";
+"auth.toggle.login" = "Already have an account? Sign in";
+
+/* Wishlists */
+"wishlists.title" = "My Wishlists";
+"wishlists.search" = "Search wishlists";
+"wishlists.create" = "Create Wishlist";
+"wishlists.empty.title" = "No Wishlists";
+"wishlists.empty.description" = "Create your first wishlist to start tracking your wishes";
+"wishlists.segment.mine" = "My Lists";
+"wishlists.segment.shared" = "Shared with Me";
+"wishlists.shared.title" = "Shared Wishlists";
+"wishlists.shared.empty.title" = "No Shared Wishlists";
+"wishlists.shared.empty.description" = "Follow wishlists from friends and family";
+"wishlists.shared.owner %@" = "by %@";
+"wishlists.follow.title" = "Follow Wishlist";
+
+/* Wishlist */
+"wishlist.create.title" = "Create Wishlist";
+"wishlist.edit.title" = "Edit Wishlist";
+"wishlist.edit" = "Edit";
+"wishlist.field.name" = "Name";
+"wishlist.field.description" = "Description (optional)";
+"wishlist.field.dueDate" = "Due Date";
+"wishlist.field.selectDate" = "Select Date";
+"wishlist.dueDate.hint" = "Set a due date for events like birthdays or holidays";
+"wishlist.delete.title" = "Delete Wishlist?";
+"wishlist.delete.message" = "This action cannot be undone. All items in this wishlist will be deleted.";
+
+/* Items */
+"items.section.title" = "Items";
+"items.progress" = "Progress";
+"items.showBought" = "Show Bought Items";
+"items.empty.title" = "No Items";
+"items.empty.description" = "Add items to your wishlist";
+"item.add" = "Add Item";
+"item.edit" = "Edit Item";
+"item.markBought" = "Mark as Bought";
+"item.markUnbought" = "Mark as Available";
+"item.status.bought" = "Bought";
+"item.status.available" = "Available";
+"item.delete.title" = "Delete Item?";
+"item.delete.message" = "This item will be permanently deleted.";
+
+/* Item Detail */
+"item.detail.title" = "Item Details";
+"item.detail.description" = "Description";
+"item.detail.notes" = "Notes";
+"item.detail.openLink" = "Open in Browser";
+"item.detail.info" = "Information";
+"item.detail.added" = "Added";
+"item.detail.updated" = "Updated";
+
+/* Priority */
+"priority.low" = "Low";
+"priority.medium" = "Medium";
+"priority.high" = "High";
+
+/* Share */
+"share.title" = "Share Wishlist";
+
+/* Profile */
+"profile.title" = "Profile";
+"profile.loading" = "Loading...";
+"profile.edit" = "Edit Profile";
+"profile.settings" = "Settings";
+"profile.about" = "About";
+"profile.privacy" = "Privacy Policy";
+"profile.terms" = "Terms of Service";
+"profile.logout" = "Sign Out";
+"profile.logout.title" = "Sign Out?";
+"profile.logout.message" = "Are you sure you want to sign out?";
+"profile.deleteAccount" = "Delete Account";
+"profile.deleteAccount.title" = "Delete Account?";
+"profile.deleteAccount.message" = "This action is permanent and cannot be undone. All your data will be deleted.";
+"profile.deleteAccount.warning" = "This action is permanent and cannot be undone.";
+"profile.version" = "Version";
+"profile.changePassword" = "Change Password";
+
+/* Edit Profile */
+"profile.edit.title" = "Edit Profile";
+"profile.edit.info" = "Personal Information";
+"profile.edit.success" = "Profile Updated";
+"profile.field.name" = "Name";
+"profile.field.email" = "Email";
+
+/* Settings */
+"settings.title" = "Settings";
+"settings.appearance" = "Appearance";
+"settings.viewMode" = "View Mode";
+"settings.viewMode.list" = "List";
+"settings.viewMode.grid" = "Grid";
+"settings.showBoughtItems" = "Show Bought Items";
+"settings.behavior" = "Behavior";
+"settings.haptics" = "Haptic Feedback";
+"settings.language" = "Language";
+"settings.language.hint" = "Changing language may require restarting the app";
+"settings.data" = "Data";
+"settings.syncNow" = "Sync Now";
+"settings.clearCache" = "Clear Cache";
+"settings.notifications" = "Notifications";
+"settings.notificationSettings" = "Notification Settings";
+"settings.notifications.hint" = "Configure notifications in device settings";
+
+/* About */
+"about.title" = "About";
+"about.description" = "WishWithMe helps you create, manage, and share wishlists with friends and family.";
+"about.features.title" = "Features";
+"about.features.wishlists" = "Wishlists";
+"about.features.wishlists.description" = "Create unlimited wishlists for any occasion";
+"about.features.sharing" = "Sharing";
+"about.features.sharing.description" = "Share wishlists with friends and family via link or QR code";
+"about.features.sync" = "Sync";
+"about.features.sync.description" = "Access your wishlists from any device";
+"about.features.marketplaces" = "Marketplaces";
+"about.features.marketplaces.description" = "Automatic item details from Ozon, Wildberries, and more";
+"about.website" = "Website";
+"about.support" = "Contact Support";
+
+/* Buttons */
+"button.cancel" = "Cancel";
+"button.save" = "Save";
+"button.create" = "Create";
+"button.delete" = "Delete";
+"button.edit" = "Edit";
+"button.share" = "Share";
+"button.done" = "Done";
+"button.retry" = "Retry";
+"button.ok" = "OK";
+"button.confirm" = "Confirm";
+"button.unfollow" = "Unfollow";
+
+/* Network */
+"network.wifi" = "Wi-Fi";
+"network.cellular" = "Cellular";
+"network.wired" = "Wired";
+"network.connected" = "Connected";
+"network.offline" = "Offline";
+"offline.banner" = "You're offline. Changes will sync when connected.";
+
+/* Loading */
+"loading" = "Loading...";
+
+/* Errors */
+"error.invalidURL" = "Invalid URL";
+"error.invalidResponse" = "Invalid response from server";
+"error.unauthorized" = "Please sign in again";
+"error.forbidden" = "Access denied";
+"error.notFound" = "Not found";
+"error.serverError" = "Server error. Please try again later.";
+"error.decodingError" = "Failed to process response";
+"error.encodingError" = "Failed to prepare request";
+"error.noData" = "No data received";
+"error.unknown" = "An unknown error occurred";
+
+"error.title.unauthorized" = "Session Expired";
+"error.message.unauthorized" = "Please sign in again to continue.";
+"error.title.network" = "Network Error";
+"error.message.network" = "Please check your internet connection.";
+"error.title.server" = "Server Error";
+"error.message.server" = "Something went wrong. Please try again.";
+"error.title.validation" = "Validation Error";
+"error.title.request" = "Request Failed";
+"error.title.unknown" = "Error";
+"error.message.unknown" = "An unexpected error occurred. Please try again.";
+"error.title.offline" = "Offline";
+"error.message.offline" = "You're offline. Please connect to the internet.";

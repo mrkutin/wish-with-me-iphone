@@ -1,0 +1,182 @@
+/* Tabs */
+"tab.wishlists" = "Списки";
+"tab.profile" = "Профиль";
+
+/* Auth */
+"auth.login.subtitle" = "Войдите, чтобы управлять списками желаний";
+"auth.signup.subtitle" = "Создайте аккаунт, чтобы начать";
+"auth.field.name" = "Имя";
+"auth.field.email" = "Email";
+"auth.field.password" = "Пароль";
+"auth.button.login" = "Войти";
+"auth.button.signup" = "Создать аккаунт";
+"auth.divider.or" = "или продолжить с";
+"auth.oauth.google" = "Продолжить с Google";
+"auth.oauth.yandex" = "Продолжить с Яндекс";
+"auth.toggle.signup" = "Нет аккаунта? Зарегистрируйтесь";
+"auth.toggle.login" = "Уже есть аккаунт? Войдите";
+
+/* Wishlists */
+"wishlists.title" = "Мои списки";
+"wishlists.search" = "Поиск списков";
+"wishlists.create" = "Создать список";
+"wishlists.empty.title" = "Нет списков";
+"wishlists.empty.description" = "Создайте свой первый список желаний";
+"wishlists.segment.mine" = "Мои списки";
+"wishlists.segment.shared" = "Общие со мной";
+"wishlists.shared.title" = "Общие списки";
+"wishlists.shared.empty.title" = "Нет общих списков";
+"wishlists.shared.empty.description" = "Подписывайтесь на списки друзей и семьи";
+"wishlists.shared.owner %@" = "от %@";
+"wishlists.follow.title" = "Подписаться на список";
+
+/* Wishlist */
+"wishlist.create.title" = "Создать список";
+"wishlist.edit.title" = "Редактировать список";
+"wishlist.edit" = "Изменить";
+"wishlist.field.name" = "Название";
+"wishlist.field.description" = "Описание (необязательно)";
+"wishlist.field.dueDate" = "Дата события";
+"wishlist.field.selectDate" = "Выберите дату";
+"wishlist.dueDate.hint" = "Укажите дату события, например день рождения или праздник";
+"wishlist.delete.title" = "Удалить список?";
+"wishlist.delete.message" = "Это действие нельзя отменить. Все товары в списке будут удалены.";
+
+/* Items */
+"items.section.title" = "Товары";
+"items.progress" = "Прогресс";
+"items.showBought" = "Показывать купленные";
+"items.empty.title" = "Нет товаров";
+"items.empty.description" = "Добавьте товары в список желаний";
+"item.add" = "Добавить товар";
+"item.edit" = "Редактировать";
+"item.markBought" = "Отметить купленным";
+"item.markUnbought" = "Отметить доступным";
+"item.status.bought" = "Куплено";
+"item.status.available" = "Доступно";
+"item.delete.title" = "Удалить товар?";
+"item.delete.message" = "Этот товар будет удалён навсегда.";
+
+/* Item Detail */
+"item.detail.title" = "Детали товара";
+"item.detail.description" = "Описание";
+"item.detail.notes" = "Заметки";
+"item.detail.openLink" = "Открыть в браузере";
+"item.detail.info" = "Информация";
+"item.detail.added" = "Добавлено";
+"item.detail.updated" = "Обновлено";
+
+/* Priority */
+"priority.low" = "Низкий";
+"priority.medium" = "Средний";
+"priority.high" = "Высокий";
+
+/* Share */
+"share.title" = "Поделиться списком";
+
+/* Profile */
+"profile.title" = "Профиль";
+"profile.loading" = "Загрузка...";
+"profile.edit" = "Редактировать профиль";
+"profile.settings" = "Настройки";
+"profile.about" = "О приложении";
+"profile.privacy" = "Политика конфиденциальности";
+"profile.terms" = "Условия использования";
+"profile.logout" = "Выйти";
+"profile.logout.title" = "Выйти из аккаунта?";
+"profile.logout.message" = "Вы уверены, что хотите выйти?";
+"profile.deleteAccount" = "Удалить аккаунт";
+"profile.deleteAccount.title" = "Удалить аккаунт?";
+"profile.deleteAccount.message" = "Это действие нельзя отменить. Все ваши данные будут удалены.";
+"profile.deleteAccount.warning" = "Это действие нельзя отменить.";
+"profile.version" = "Версия";
+"profile.changePassword" = "Изменить пароль";
+
+/* Edit Profile */
+"profile.edit.title" = "Редактировать профиль";
+"profile.edit.info" = "Личная информация";
+"profile.edit.success" = "Профиль обновлён";
+"profile.field.name" = "Имя";
+"profile.field.email" = "Email";
+
+/* Settings */
+"settings.title" = "Настройки";
+"settings.appearance" = "Внешний вид";
+"settings.viewMode" = "Режим отображения";
+"settings.viewMode.list" = "Список";
+"settings.viewMode.grid" = "Сетка";
+"settings.showBoughtItems" = "Показывать купленные";
+"settings.behavior" = "Поведение";
+"settings.haptics" = "Тактильный отклик";
+"settings.language" = "Язык";
+"settings.language.hint" = "Изменение языка может потребовать перезапуска приложения";
+"settings.data" = "Данные";
+"settings.syncNow" = "Синхронизировать";
+"settings.clearCache" = "Очистить кэш";
+"settings.notifications" = "Уведомления";
+"settings.notificationSettings" = "Настройки уведомлений";
+"settings.notifications.hint" = "Настройте уведомления в системных настройках";
+
+/* About */
+"about.title" = "О приложении";
+"about.description" = "WishWithMe помогает создавать, управлять и делиться списками желаний с друзьями и семьёй.";
+"about.features.title" = "Возможности";
+"about.features.wishlists" = "Списки желаний";
+"about.features.wishlists.description" = "Создавайте неограниченное количество списков";
+"about.features.sharing" = "Общий доступ";
+"about.features.sharing.description" = "Делитесь списками по ссылке или QR-коду";
+"about.features.sync" = "Синхронизация";
+"about.features.sync.description" = "Доступ к спискам с любого устройства";
+"about.features.marketplaces" = "Маркетплейсы";
+"about.features.marketplaces.description" = "Автоматическое получение данных с Ozon, Wildberries и других";
+"about.website" = "Веб-сайт";
+"about.support" = "Связаться с поддержкой";
+
+/* Buttons */
+"button.cancel" = "Отмена";
+"button.save" = "Сохранить";
+"button.create" = "Создать";
+"button.delete" = "Удалить";
+"button.edit" = "Изменить";
+"button.share" = "Поделиться";
+"button.done" = "Готово";
+"button.retry" = "Повторить";
+"button.ok" = "OK";
+"button.confirm" = "Подтвердить";
+"button.unfollow" = "Отписаться";
+
+/* Network */
+"network.wifi" = "Wi-Fi";
+"network.cellular" = "Мобильная сеть";
+"network.wired" = "Проводное соединение";
+"network.connected" = "Подключено";
+"network.offline" = "Нет сети";
+"offline.banner" = "Нет сети. Изменения синхронизируются при подключении.";
+
+/* Loading */
+"loading" = "Загрузка...";
+
+/* Errors */
+"error.invalidURL" = "Неверный URL";
+"error.invalidResponse" = "Неверный ответ сервера";
+"error.unauthorized" = "Войдите в аккаунт снова";
+"error.forbidden" = "Доступ запрещён";
+"error.notFound" = "Не найдено";
+"error.serverError" = "Ошибка сервера. Попробуйте позже.";
+"error.decodingError" = "Ошибка обработки ответа";
+"error.encodingError" = "Ошибка подготовки запроса";
+"error.noData" = "Данные не получены";
+"error.unknown" = "Произошла неизвестная ошибка";
+
+"error.title.unauthorized" = "Сессия истекла";
+"error.message.unauthorized" = "Войдите в аккаунт снова.";
+"error.title.network" = "Ошибка сети";
+"error.message.network" = "Проверьте подключение к интернету.";
+"error.title.server" = "Ошибка сервера";
+"error.message.server" = "Что-то пошло не так. Попробуйте ещё раз.";
+"error.title.validation" = "Ошибка валидации";
+"error.title.request" = "Ошибка запроса";
+"error.title.unknown" = "Ошибка";
+"error.message.unknown" = "Произошла непредвиденная ошибка. Попробуйте ещё раз.";
+"error.title.offline" = "Нет сети";
+"error.message.offline" = "Вы не в сети. Подключитесь к интернету.";
