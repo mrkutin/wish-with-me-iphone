@@ -1,0 +1,55 @@
+# E2E Delete with Long Wait
+# Delete Qqq → Wait 10+ seconds → Sign Out → Sign In → Verify deleted
+appId: me.wishwith.app
+---
+# First recreate Qqq if it doesn't exist (from previous test failure)
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 10000
+
+# Check if Qqq exists - if not, the test is invalid
+- assertVisible: "Qqq"
+
+# Delete Qqq
+- swipe:
+    from:
+      text: "Qqq"
+    direction: LEFT
+- tapOn: "Delete"
+- waitForAnimationToEnd
+- assertNotVisible: "Qqq"
+
+# Wait LONG time for sync - 10 seconds total
+- swipe:
+    direction: DOWN
+    duration: 2500
+- swipe:
+    direction: DOWN
+    duration: 2500
+- swipe:
+    direction: DOWN
+    duration: 2500
+- swipe:
+    direction: DOWN
+    duration: 2500
+
+# Now sign out
+- tapOn: "Profile"
+- tapOn: "Sign Out"
+
+# Login again
+- assertVisible: "Sign In"
+- tapOn: "Email"
+- inputText: "test@test.ru"
+- tapOn: "Password"
+- inputText: "1qaz!QAZ"
+- tapOn: "Sign In"
+
+# Wait for wishlists
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
+
+# THE KEY TEST
+- assertNotVisible: "Qqq"
+- assertVisible: "Relogin Test ABC"

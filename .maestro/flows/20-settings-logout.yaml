@@ -1,0 +1,54 @@
+appId: me.wishwith.app
+---
+# Flow 20: Login, navigate to Settings, logout from Settings screen
+- launchApp:
+    clearState: true
+    arguments:
+      clearKeychain: "1"
+- extendedWaitUntil:
+    visible: "Share your wishes"
+    timeout: 10000
+- tapOn: "Email"
+- inputText: "test-ios-app@wishwith.me"
+- tapOn: "Password"
+- inputText: "TestPass123"
+- tapOn: "Log In"
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+# Navigate to profile
+- tapOn:
+    id: "person.circle"
+- extendedWaitUntil:
+    visible: "Profile"
+    timeout: 5000
+# Navigate to Settings
+- scrollUntilVisible:
+    element: "Settings"
+    direction: DOWN
+- tapOn: "Settings"
+- extendedWaitUntil:
+    visible: "Log Out"
+    timeout: 5000
+# Tap Log Out
+- scrollUntilVisible:
+    element: "Log Out"
+    direction: DOWN
+- tapOn: "Log Out"
+# Verify we are back at login screen
+- extendedWaitUntil:
+    visible: "Log In"
+    timeout: 10000
+- assertVisible: "Wish With Me"

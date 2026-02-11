@@ -1,0 +1,60 @@
+# E2E Delete Persistence Test - Full Scenario (Fixed)
+# Delete Qqq → Sign Out → Sign In → Verify still deleted
+appId: me.wishwith.app
+---
+# Step 1: Verify starting state
+- assertVisible: "Wishlists"
+- assertVisible: "Qqq"
+
+# Step 2: Swipe left on Qqq to reveal delete button
+- swipe:
+    from:
+      text: "Qqq"
+    direction: LEFT
+
+# Step 3: Tap Delete button
+- tapOn: "Delete"
+
+# Wait for delete animation
+- waitForAnimationToEnd
+
+# Step 4: Verify Qqq is gone locally
+- assertNotVisible: "Qqq"
+
+# IMPORTANT: Wait for sync to complete (syncNow takes ~2 seconds)
+# Pull to refresh which will wait for any pending sync
+- swipe:
+    direction: DOWN
+    duration: 1000
+
+# Wait a bit more to ensure sync completes
+- swipe:
+    direction: DOWN
+    duration: 1000
+
+# Step 5: Navigate to Profile tab
+- tapOn: "Profile"
+
+# Step 6: Tap Sign Out
+- tapOn: "Sign Out"
+
+# Step 7: Verify we're on login screen
+- assertVisible: "Sign In"
+
+# Step 8: Login again
+- tapOn: "Email"
+- inputText: "test@test.ru"
+- tapOn: "Password"
+- inputText: "1qaz!QAZ"
+- tapOn: "Sign In"
+
+# Step 9: Wait for wishlists to load
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
+
+# Step 10: Verify Qqq is STILL gone after re-login
+- assertNotVisible: "Qqq"
+
+# Verify other wishlists ARE visible
+- assertVisible: "Relogin Test ABC"

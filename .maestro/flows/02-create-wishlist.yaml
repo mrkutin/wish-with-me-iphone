@@ -1,0 +1,25 @@
+appId: me.wishwith.app
+---
+- launchApp
+# Wait for the wishlists screen to appear (already logged in)
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+# Tap "+" button in toolbar to create wishlist (works in both empty and non-empty state)
+- tapOn:
+    id: "plus"
+- extendedWaitUntil:
+    visible: "Wishlist name"
+    timeout: 5000
+- tapOn: "Wishlist name"
+- inputText: "Birthday Gifts"
+- tapOn: "Create"
+- waitForAnimationToEnd:
+    timeout: 3000
+# Verify wishlist appears in the list
+- assertVisible: "Birthday Gifts"

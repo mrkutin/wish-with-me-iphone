@@ -1,0 +1,57 @@
+appId: me.wishwith.app
+---
+# Flow 16: Login as Account B, open bookmark, unmark the item
+- launchApp:
+    arguments:
+      clearKeychain: "1"
+- extendedWaitUntil:
+    visible: "Share your wishes"
+    timeout: 15000
+- tapOn: "Email"
+- inputText: "test-ios-b@wishwith.me"
+- tapOn: "Password"
+- inputText: "TestPass123"
+- tapOn: "Log In"
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+# Wait for bookmarks to sync (may take time after fresh login)
+- extendedWaitUntil:
+    visible: "Shared with me"
+    timeout: 30000
+# Open the shared wishlist
+- tapOn:
+    text: "Birthday Gifts"
+    index: 0
+- extendedWaitUntil:
+    visible: "shared this wishlist with you"
+    timeout: 10000
+# Wait for marks to load (may take a moment after items render)
+- extendedWaitUntil:
+    visible: "Marked by you"
+    timeout: 10000
+# Unmark the item
+- tapOn: "Unmark"
+- waitForAnimationToEnd:
+    timeout: 3000
+# Verify mark is gone — wait for the new "I'll get this" to appear
+# Note: Blue Sneakers already has "I'll get this" so wait for unmark to complete
+- extendedWaitUntil:
+    visible: "I'll get this"
+    timeout: 5000
+# Wait a moment for the view to fully update after unmark
+- waitForAnimationToEnd:
+    timeout: 2000
+- assertNotVisible: "Marked by you"

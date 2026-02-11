@@ -1,0 +1,12 @@
+# Delete Persistence E2E Test
+appId: me.wishwith.app
+---
+# Step 1: Verify we see the target wishlist "Qqq"
+- assertVisible: "Wishlists"
+- assertVisible: "Qqq"
+- takeScreenshot: /tmp/e2e-step1-before-delete
+
+# Step 2: Delete "Qqq" by swiping left on it
+- longPressOn: "Qqq"
+- takeScreenshot: /tmp/e2e-step2-after-longpress
+

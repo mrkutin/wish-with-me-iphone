@@ -1,0 +1,82 @@
+# Full Delete Persistence Test
+appId: me.wishwith.app
+---
+# Login if needed
+- runFlow:
+    when:
+      visible: "Sign In"
+    commands:
+      - tapOn: "Email"
+      - inputText: "test@test.ru"
+      - hideKeyboard
+      - tapOn: "Password"
+      - inputText: "1qaz!QAZ"
+      - hideKeyboard
+      - tapOn: "Sign In"
+
+# Wait for wishlists
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 20000
+
+# Check if Qqq exists - if not, create it
+- runFlow:
+    when:
+      notVisible: "Qqq"
+    commands:
+      - tapOn:
+          id: ".*plus.*"
+      - extendedWaitUntil:
+          visible: "Create Wishlist"
+          timeout: 5000
+      - tapOn: "Wishlist Name"
+      - inputText: "Qqq"
+      - hideKeyboard
+      - tapOn: "Save"
+      - waitForAnimationToEnd
+
+# Now Qqq should exist
+- assertVisible: "Qqq"
+
+# Delete Qqq
+- swipe:
+    from:
+      text: "Qqq"
+    direction: LEFT
+- tapOn: "Delete"
+- waitForAnimationToEnd
+
+# Verify deleted from UI
+- assertNotVisible: "Qqq"
+
+# Wait for sync (give it time to push)
+- swipe:
+    direction: DOWN
+    duration: 1000
+
+# Go to Profile and sign out
+- tapOn: "Profile"
+- waitForAnimationToEnd
+- tapOn: "Sign Out"
+
+# Wait for logout (may show syncing first)
+- extendedWaitUntil:
+    visible: "Sign In"
+    timeout: 30000
+
+# Login again
+- tapOn: "Email"
+- inputText: "test@test.ru"
+- hideKeyboard
+- tapOn: "Password"
+- inputText: "1qaz!QAZ"
+- hideKeyboard
+- tapOn: "Sign In"
+
+# Wait for wishlists
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 20000
+
+# THE KEY TEST: Qqq should be gone
+- assertNotVisible: "Qqq"

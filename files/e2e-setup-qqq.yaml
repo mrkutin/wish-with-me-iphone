@@ -1,0 +1,47 @@
+# E2E Setup - Create Qqq wishlist
+appId: me.wishwith.app
+---
+# Launch and wait for app
+- launchApp
+- waitForAnimationToEnd
+
+# Wait and sign in if needed
+- extendedWaitUntil:
+    visible: "Sign In"
+    timeout: 5000
+    optional: true
+
+- runFlow:
+    when:
+      visible: "Sign In"
+    commands:
+      - tapOn: "Email"
+      - inputText: "test@test.ru"
+      - tapOn: "Password"
+      - inputText: "1qaz!QAZ"
+      - tapOn: "Sign In"
+
+# Wait for wishlists view
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
+
+# Wait for sync
+- swipe:
+    direction: DOWN
+    duration: 500
+
+# If Qqq doesn't exist, create it
+- runFlow:
+    when:
+      notVisible: "Qqq"
+    commands:
+      - tapOn:
+          id: ".*plus.*"
+      - assertVisible: "Create Wishlist"
+      - tapOn: "Wishlist Name"
+      - inputText: "Qqq"
+      - tapOn: "Save"
+      - waitForAnimationToEnd
+
+- assertVisible: "Qqq"

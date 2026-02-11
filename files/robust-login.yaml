@@ -1,0 +1,17 @@
+# Robust login that handles keyboard popover
+appId: me.wishwith.app
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: "Sign In"
+    timeout: 10000
+- tapOn: "Email"
+- inputText: "test@test.ru"
+- pressKey: Enter
+- tapOn: "Password"
+- inputText: "1qaz!QAZ"
+- pressKey: Enter
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 20000

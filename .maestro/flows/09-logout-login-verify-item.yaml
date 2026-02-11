@@ -1,0 +1,52 @@
+appId: me.wishwith.app
+---
+- launchApp
+# Wait for wishlists screen
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+# Wait for sync to complete
+- waitForAnimationToEnd:
+    timeout: 5000
+# Tap Log Out
+- tapOn: "Log Out"
+- extendedWaitUntil:
+    visible: "Log In"
+    timeout: 10000
+# Login again
+- tapOn: "Email"
+- inputText: "test-ios-app@wishwith.me"
+- tapOn: "Password"
+- inputText: "TestPass123"
+- tapOn: "Log In"
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+# Verify wishlist still exists
+- assertVisible: "Birthday Gifts"
+# Navigate into wishlist
+- tapOn: "Birthday Gifts"
+- waitForAnimationToEnd:
+    timeout: 8000
+# Verify the resolved item is still there (not "www.ozon.ru" or "Resolving...")
+- assertNotVisible:
+    text: "No items yet"
+- assertNotVisible:
+    text: "Resolving..."

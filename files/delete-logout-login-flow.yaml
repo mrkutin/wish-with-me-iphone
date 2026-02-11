@@ -1,0 +1,62 @@
+# Delete → Logout → Login Test Flow
+# Tests: delete wishlist → logout → login → wishlist should remain deleted
+appId: me.wishwith.app
+---
+# Start fresh
+- clearState
+- launchApp
+
+# Login
+- assertVisible: "Log In"
+- tapOn: "Email"
+- inputText: "test@test.ru"
+- tapOn: "Password"
+- inputText: "1qaz!QAZ"
+- tapOn: "Log In"
+
+# Wait for wishlists to load
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 10000
+
+# Remember initial count and pick a wishlist to delete
+# We'll delete "Qqq" which we know exists
+- assertVisible: "Qqq"
+
+# Delete "Qqq" by swiping
+- swipe:
+    start: 90%, 30%
+    end: 10%, 30%
+    duration: 500
+- tapOn: "Delete"
+
+# Verify it's gone from the list
+- assertNotVisible: "Qqq"
+
+# Wait a bit for sync to complete
+- swipe:
+    direction: DOWN
+    duration: 500
+
+# Go to Profile tab to logout
+- tapOn: "Profile"
+- assertVisible: "Profile"
+- tapOn: "Log Out"
+
+# Confirm we're logged out
+- assertVisible: "Log In"
+
+# Login again
+- tapOn: "Email"
+- inputText: "test@test.ru"
+- tapOn: "Password"
+- inputText: "1qaz!QAZ"
+- tapOn: "Log In"
+
+# Wait for wishlists to load
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 10000
+
+# Verify deleted wishlist is still gone
+- assertNotVisible: "Qqq"

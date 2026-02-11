@@ -1,0 +1,14 @@
+appId: me.wishwith.app
+---
+- launchApp
+- extendedWaitUntil:
+    visible: "Birthday Gifts"
+    timeout: 15000
+- scrollUntilVisible:
+    element: "Log Out"
+    direction: DOWN
+- tapOn: "Log Out"
+- extendedWaitUntil:
+    visible: "Log In"
+    timeout: 10000
+- assertVisible: "Wish With Me"

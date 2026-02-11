@@ -1,0 +1,41 @@
+appId: me.wishwith.app
+---
+- launchApp
+- extendedWaitUntil:
+    visible: "No wishlists yet"
+    timeout: 15000
+# Wait for sync to push the deletion to server
+- waitForAnimationToEnd:
+    timeout: 5000
+# Log out
+- tapOn: "Log Out"
+- extendedWaitUntil:
+    visible: "Log In"
+    timeout: 10000
+# Log back in
+- tapOn: "Email"
+- inputText: "test-ios-app@wishwith.me"
+- tapOn: "Password"
+- inputText: "TestPass123"
+- tapOn: "Log In"
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+# Wait for sync to complete after login
+- waitForAnimationToEnd:
+    timeout: 8000
+# Verify wishlist did NOT reappear — empty state should show
+- assertVisible: "No wishlists yet"
+- assertNotVisible: "Birthday Gifts"

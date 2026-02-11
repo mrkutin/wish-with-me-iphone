@@ -1,0 +1,63 @@
+appId: me.wishwith.app
+---
+# Flow 12: Login as Account A, open wishlist, create a share link
+- launchApp:
+    clearState: true
+    arguments:
+      clearKeychain: "1"
+- extendedWaitUntil:
+    visible: "Share your wishes"
+    timeout: 10000
+- tapOn: "Email"
+- inputText: "test-ios-app@wishwith.me"
+- tapOn: "Password"
+- inputText: "TestPass123"
+- tapOn: "Log In"
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+# Verify wishlists screen loaded
+- assertVisible: "Birthday Gifts"
+# Navigate into the wishlist
+- tapOn: "Birthday Gifts"
+- extendedWaitUntil:
+    visible: "Birthday Gifts"
+    timeout: 10000
+# Open the ellipsis menu
+- tapOn:
+    id: "ellipsis.circle"
+- extendedWaitUntil:
+    visible: "Share"
+    timeout: 3000
+# Tap Share
+- tapOn: "Share"
+- extendedWaitUntil:
+    visible: "Share Wishlist"
+    timeout: 5000
+# Verify Share sheet appeared
+- assertVisible: "Share Wishlist"
+# Create a share link
+- tapOn:
+    id: "plus"
+- extendedWaitUntil:
+    visible: "View & Mark (recommended)"
+    timeout: 5000
+- tapOn: "View & Mark (recommended)"
+- extendedWaitUntil:
+    visible: "View & Mark"
+    timeout: 10000
+# Verify share link was created and is displayed
+- assertVisible: "View & Mark"
+- assertVisible: "Copy Link"

@@ -1,0 +1,39 @@
+appId: me.wishwith.app
+---
+# Flow 13: Login as Account B, verify "Shared with me" section shows bookmark
+# Pre-requisite: Account B already granted access via API
+- launchApp:
+    clearState: true
+    arguments:
+      clearKeychain: "1"
+- extendedWaitUntil:
+    visible: "Share your wishes"
+    timeout: 10000
+- tapOn: "Email"
+- inputText: "test-ios-b@wishwith.me"
+- tapOn: "Password"
+- inputText: "TestPass123"
+- tapOn: "Log In"
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+# Wait for sync to complete and bookmarks to appear
+- extendedWaitUntil:
+    visible: "Shared with me"
+    timeout: 15000
+# Verify bookmark section is visible
+- assertVisible: "Shared with me"
+# Verify the bookmarked wishlist name appears
+- assertVisible: "Birthday Gifts"

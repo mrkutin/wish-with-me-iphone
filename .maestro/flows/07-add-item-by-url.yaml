@@ -1,0 +1,36 @@
+appId: me.wishwith.app
+---
+- launchApp
+# Wait for the wishlists screen
+- extendedWaitUntil:
+    visible: "Birthday Gifts"
+    timeout: 15000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+# Tap the wishlist to open detail
+- tapOn: "Birthday Gifts"
+- waitForAnimationToEnd:
+    timeout: 5000
+# Tap the + button in the toolbar to add an item
+- tapOn:
+    id: "plus"
+- extendedWaitUntil:
+    visible: "Add Item"
+    timeout: 5000
+# Default mode is "By URL" — enter a product URL
+- tapOn: "https://example.com/product"
+- inputText: "https://www.ozon.ru/product/1632508757"
+# Tap Create
+- tapOn: "Create"
+- waitForAnimationToEnd:
+    timeout: 3000
+# The item should appear with hostname as title
+- extendedWaitUntil:
+    visible: "www.ozon.ru"
+    timeout: 5000
+# Should show resolving status
+- assertVisible:
+    text: "Resolving..."

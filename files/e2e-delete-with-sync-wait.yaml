@@ -1,0 +1,55 @@
+# E2E Delete with Sync Wait
+# Delete Qqq → Wait for sync → Sign Out → Sign In → Verify deleted
+appId: me.wishwith.app
+---
+# Wait for initial sync to complete
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 10000
+
+# Verify Qqq exists
+- assertVisible: "Qqq"
+
+# Delete Qqq
+- swipe:
+    from:
+      text: "Qqq"
+    direction: LEFT
+- tapOn: "Delete"
+- waitForAnimationToEnd
+
+# Verify locally deleted
+- assertNotVisible: "Qqq"
+
+# Wait for sync by doing multiple pull-to-refresh with delays
+# Each swipe takes ~1-2 seconds
+- swipe:
+    direction: DOWN
+    duration: 2000
+- swipe:
+    direction: DOWN
+    duration: 2000
+- swipe:
+    direction: DOWN
+    duration: 2000
+
+# Go to profile
+- tapOn: "Profile"
+- tapOn: "Sign Out"
+
+# Login again
+- assertVisible: "Sign In"
+- tapOn: "Email"
+- inputText: "test@test.ru"
+- tapOn: "Password"
+- inputText: "1qaz!QAZ"
+- tapOn: "Sign In"
+
+# Wait for wishlists
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
+
+# THE KEY TEST: Qqq should still be gone!
+- assertNotVisible: "Qqq"
+- assertVisible: "Relogin Test ABC"

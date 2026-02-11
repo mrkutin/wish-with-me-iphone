@@ -1,0 +1,24 @@
+# Verify deletion persists after logout/login
+# Continuing from Profile screen where Qqq was just deleted
+appId: me.wishwith.app
+---
+# We're on Profile screen - tap Sign Out
+- tapOn: "Sign Out"
+
+# Verify we're on login screen
+- assertVisible: "Log In"
+
+# Login again
+- tapOn: "Email"
+- inputText: "test@test.ru"
+- tapOn: "Password"
+- inputText: "1qaz!QAZ"
+- tapOn: "Log In"
+
+# Wait for wishlists to load
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
+
+# CRITICAL: Verify Qqq is STILL gone after re-login
+- assertNotVisible: "Qqq"

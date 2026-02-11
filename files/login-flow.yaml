@@ -1,0 +1,14 @@
+# Login Flow - Wish With Me iOS
+# Tests: email/password login → navigate to wishlists
+appId: me.wishwith.app
+---
+- launchApp
+- assertVisible: "Log In"
+- tapOn: "Email"
+- inputText: "test@test.ru"
+- tapOn: "Password"
+- inputText: "1qaz!QAZ"
+- tapOn: "Log In"
+- extendedWaitUntil:
+    visible: "My Wishlists"
+    timeout: 10000

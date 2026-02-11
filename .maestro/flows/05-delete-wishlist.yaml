@@ -1,0 +1,32 @@
+appId: me.wishwith.app
+---
+- launchApp
+- extendedWaitUntil:
+    visible: "Birthday Gifts"
+    timeout: 15000
+# Swipe left on the wishlist row to reveal delete action
+- swipe:
+    start: 80%, 25%
+    end: 20%, 25%
+- waitForAnimationToEnd:
+    timeout: 2000
+# Tap swipe action Delete button
+- runFlow:
+    when:
+      visible: "Delete"
+    commands:
+      - tapOn: "Delete"
+- waitForAnimationToEnd:
+    timeout: 2000
+# The confirmation alert should now be showing
+# Tap the destructive Delete button in the alert
+# Use point tap on the right side of the alert button area
+- tapOn:
+    point: 70%, 57%
+- waitForAnimationToEnd:
+    timeout: 3000
+# Verify wishlist is gone - should see empty state
+- extendedWaitUntil:
+    visible: "No wishlists yet"
+    timeout: 5000
+- assertNotVisible: "Birthday Gifts"

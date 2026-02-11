@@ -1,0 +1,14 @@
+appId: me.wishwith.app
+---
+- runFlow:
+    when:
+      visible: "Sign In"
+    commands:
+      - tapOn: "Email"
+      - inputText: "test@test.ru"
+      - tapOn: "Password"
+      - inputText: "1qaz!QAZ"
+      - tapOn: "Sign In"
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
