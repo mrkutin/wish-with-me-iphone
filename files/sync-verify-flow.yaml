@@ -1,0 +1,18 @@
+# Sync Verify Flow - Wish With Me iOS
+# Tests: verify wishlists are synced from server
+appId: me.wishwith.app
+---
+- launchApp:
+    clearState: false
+# Verify we're on the wishlists screen
+- assertVisible: "Wishlists"
+# Verify wishlists from server are shown (these exist in the API response)
+- assertVisible: "Relogin Test ABC"
+- assertVisible: "Qqq"
+# Pull to refresh and verify sync completes
+- swipe:
+    direction: DOWN
+    duration: 1000
+# Verify wishlists still visible after sync
+- assertVisible: "Wishlists"
+- assertVisible: "Relogin Test ABC"

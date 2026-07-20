@@ -1,0 +1,44 @@
+appId: me.wishwith.app
+---
+- launchApp
+# Wait for the wishlists screen
+- extendedWaitUntil:
+    visible: "Birthday Gifts"
+    timeout: 15000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+# Tap the wishlist to open detail
+- tapOn: "Birthday Gifts"
+- waitForAnimationToEnd:
+    timeout: 5000
+# Tap the + button to add an item
+- tapOn:
+    id: "plus"
+- extendedWaitUntil:
+    visible: "Add Item"
+    timeout: 5000
+# Switch to Manual mode
+- tapOn: "Manual"
+- waitForAnimationToEnd:
+    timeout: 2000
+# Fill in the title
+- tapOn: "Title"
+- inputText: "Blue Sneakers"
+# Fill in description
+- tapOn: "Description (optional)"
+- inputText: "Size 42 EU"
+# Fill in price
+- tapOn: "Price"
+- inputText: "5999"
+# Tap Create
+- tapOn: "Create"
+- waitForAnimationToEnd:
+    timeout: 3000
+# The manually created item should appear
+- extendedWaitUntil:
+    visible: "Blue Sneakers"
+    timeout: 5000
+- assertVisible: "Blue Sneakers"

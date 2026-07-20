@@ -1,0 +1,12 @@
+# Share Wishlist Flow - Wish With Me iOS
+# Tests: create share link for existing wishlist
+# Prerequisite: user is logged in, wishlist exists
+appId: me.wishwith.app
+---
+- launchApp
+- assertVisible: "My Wishlists"
+- tapOn: "Birthday Wishlist"
+- tapOn: "Share"
+- assertVisible: "Share Wishlist"
+- tapOn: "Create Link"
+- assertVisible: "Link copied"

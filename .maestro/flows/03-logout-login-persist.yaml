@@ -1,0 +1,41 @@
+appId: me.wishwith.app
+---
+- launchApp
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+# Step 3: Verify wishlist exists
+- assertVisible: "Birthday Gifts"
+# Step 4: Log out
+- tapOn: "Log Out"
+- extendedWaitUntil:
+    visible: "Wish With Me"
+    timeout: 10000
+# Step 5: Log back in
+- tapOn: "Email"
+- inputText: "test-ios-app@wishwith.me"
+- tapOn: "Password"
+- inputText: "TestPass123"
+- tapOn: "Log In"
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+# Verify wishlist is still there after re-login
+- assertVisible: "Birthday Gifts"

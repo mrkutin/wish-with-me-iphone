@@ -1,0 +1,46 @@
+appId: me.wishwith.app
+---
+# Flow 18: Navigate to profile, edit name, save
+- launchApp
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+# Navigate to profile
+- tapOn:
+    id: "person.circle"
+- extendedWaitUntil:
+    visible: "Profile"
+    timeout: 5000
+# Verify profile fields are visible
+- assertVisible: "Name"
+- assertVisible: "Bio"
+# Tap the Name field
+- tapOn: "Name"
+# Select all and replace text
+- longPressOn: "Name"
+- runFlow:
+    when:
+      visible: "Select All"
+    commands:
+      - tapOn: "Select All"
+      - tapOn: "Cut"
+- inputText: "Test iOS User"
+# Swipe up on the form to dismiss keyboard and scroll down
+- swipe:
+    start: "50%,60%"
+    end: "50%,20%"
+- waitForAnimationToEnd:
+    timeout: 2000
+# Tap Save
+- tapOn: "Save"
+- waitForAnimationToEnd:
+    timeout: 5000
+# Verify success message
+- extendedWaitUntil:
+    visible: "Profile saved"
+    timeout: 10000

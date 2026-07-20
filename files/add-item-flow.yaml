@@ -1,0 +1,18 @@
+# Add Item Flow - Wish With Me iOS
+# Tests: add item by URL to existing wishlist
+# Prerequisite: user is logged in, wishlist exists
+appId: me.wishwith.app
+---
+- launchApp
+- assertVisible: "My Wishlists"
+- tapOn: "Birthday Wishlist"
+- assertVisible: "Birthday Wishlist"
+- tapOn: "Add Item"
+- assertVisible: "Add Item"
+- tapOn: "Paste URL"
+- inputText: "https://www.amazon.com/dp/B0EXAMPLE"
+- tapOn: "Add"
+- assertVisible:
+    text: ".*pending.*"
+    regex: true
+    timeout: 5000

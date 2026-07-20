@@ -1,0 +1,13 @@
+# Create Wishlist Flow - Wish With Me iOS
+# Tests: create new wishlist with name and icon
+# Prerequisite: user is logged in
+appId: me.wishwith.app
+---
+- launchApp
+- assertVisible: "My Wishlists"
+- tapOn: "Create Wishlist"
+- assertVisible: "New Wishlist"
+- tapOn: "Wishlist Name"
+- inputText: "Birthday Wishlist"
+- tapOn: "Save"
+- assertVisible: "Birthday Wishlist"

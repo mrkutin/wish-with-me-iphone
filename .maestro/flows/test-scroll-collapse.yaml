@@ -1,0 +1,88 @@
+appId: me.wishwith.app
+---
+# Test: scroll collapse on shared wishlist content
+- launchApp:
+    clearState: true
+    arguments:
+      clearKeychain: "1"
+- extendedWaitUntil:
+    visible: "Share your wishes"
+    timeout: 10000
+- tapOn: "Email"
+- inputText: "test-ios-b@wishwith.me"
+- tapOn: "Password"
+- inputText: "TestPass123"
+- hideKeyboard
+- tapOn: "Log in button"
+- waitForAnimationToEnd:
+    timeout: 3000
+- runFlow:
+    when:
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+- extendedWaitUntil:
+    visible: "Home"
+    timeout: 20000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+# Tap Shared tab
+- tapOn: "Shared"
+- waitForAnimationToEnd:
+    timeout: 3000
+# Wait for bookmarks list to load
+- extendedWaitUntil:
+    visible: "Birthday Gifts"
+    timeout: 30000
+- takeScreenshot: screenshots/test/01-shared-bookmarks-list
+# Tap on the shared wishlist to open it
+- tapOn: "Birthday Gifts"
+- waitForAnimationToEnd:
+    timeout: 3000
+# Wait for shared wishlist content to load
+- extendedWaitUntil:
+    visible: "shared this wishlist with you"
+    timeout: 15000
+# Take screenshot at top (tab bar should be expanded)
+- takeScreenshot: screenshots/test/02-shared-wishlist-top
+# Scroll down
+- swipe:
+    start: "50%,70%"
+    end: "50%,30%"
+- waitForAnimationToEnd:
+    timeout: 1000
+- swipe:
+    start: "50%,70%"
+    end: "50%,30%"
+- waitForAnimationToEnd:
+    timeout: 1000
+# Take screenshot after scrolling (tab bar should be collapsed)
+- takeScreenshot: screenshots/test/03-shared-wishlist-scrolled
+# Scroll back up
+- swipe:
+    start: "50%,30%"
+    end: "50%,70%"
+- waitForAnimationToEnd:
+    timeout: 1000
+- swipe:
+    start: "50%,30%"
+    end: "50%,70%"
+- waitForAnimationToEnd:
+    timeout: 1000
+- swipe:
+    start: "50%,30%"
+    end: "50%,70%"
+- waitForAnimationToEnd:
+    timeout: 1000
+# Take screenshot at top again (tab bar should be expanded again)
+- takeScreenshot: screenshots/test/04-shared-wishlist-back-top

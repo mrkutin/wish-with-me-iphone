@@ -1,0 +1,42 @@
+appId: me.wishwith.app
+---
+# Flow 14: As Account B, open shared wishlist from bookmark, mark an item
+# Pre-requisite: Account B is logged in, bookmark visible (run flow 13 first)
+- launchApp
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+# Wait for bookmark section to appear after sync
+- extendedWaitUntil:
+    visible: "Shared with me"
+    timeout: 15000
+# Scroll to find and tap the bookmarked wishlist
+- scrollUntilVisible:
+    element: "Birthday Gifts"
+    direction: DOWN
+# Tap on the bookmark to open shared wishlist view
+# The bookmark is in "Shared with me" section - use the second "Birthday Gifts"
+- tapOn:
+    text: "Birthday Gifts"
+    index: 0
+- extendedWaitUntil:
+    visible: "shared this wishlist with you"
+    timeout: 10000
+# Wait for items to load
+- waitForAnimationToEnd:
+    timeout: 5000
+# Verify items are displayed
+- assertVisible: "Blue Sneakers"
+# Mark the first item - tap "I'll get this"
+- tapOn: "I'll get this"
+- extendedWaitUntil:
+    visible: "Marked by you"
+    timeout: 5000
+# Verify mark indicator appeared
+- assertVisible: "Marked by you"
+- assertVisible: "Unmark"

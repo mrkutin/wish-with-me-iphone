@@ -1,0 +1,44 @@
+appId: me.wishwith.app
+---
+# Flow 15: Login as Account A (owner), verify NO marks visible (surprise mode)
+- launchApp:
+    arguments:
+      clearKeychain: "1"
+- extendedWaitUntil:
+    visible: "Share your wishes"
+    timeout: 15000
+- tapOn: "Email"
+- inputText: "test-ios-app@wishwith.me"
+- tapOn: "Password"
+- inputText: "TestPass123"
+- tapOn: "Log In"
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+# Wait for sync to complete and wishlists to appear
+- extendedWaitUntil:
+    visible: "Birthday Gifts"
+    timeout: 45000
+# Navigate to the wishlist
+- tapOn: "Birthday Gifts"
+- extendedWaitUntil:
+    visible: "Blue Sneakers"
+    timeout: 10000
+# Verify items are shown but NO mark indicators
+- assertVisible: "Blue Sneakers"
+- assertNotVisible: "Marked by you"
+- assertNotVisible: "I'll get this"
+- assertNotVisible: "Unmark"
+- assertNotVisible: "Already taken"

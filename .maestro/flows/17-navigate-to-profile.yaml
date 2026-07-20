@@ -1,0 +1,41 @@
+appId: me.wishwith.app
+---
+# Flow 17: Login and navigate to Profile screen
+- launchApp:
+    clearState: true
+    arguments:
+      clearKeychain: "1"
+- extendedWaitUntil:
+    visible: "Share your wishes"
+    timeout: 10000
+- tapOn: "Email"
+- inputText: "test-ios-app@wishwith.me"
+- tapOn: "Password"
+- inputText: "TestPass123"
+- tapOn: "Log In"
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+- extendedWaitUntil:
+    visible: "Wishlists"
+    timeout: 15000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+# Tap the profile icon in toolbar
+- tapOn:
+    id: "person.circle"
+- extendedWaitUntil:
+    visible: "Profile"
+    timeout: 5000
+# Verify profile screen loaded with user info
+- assertVisible: "Profile"
+- assertVisible: "Name"
+- assertVisible: "Bio"
+- assertVisible: "Save"

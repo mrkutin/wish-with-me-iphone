@@ -1,0 +1,23 @@
+# Xcode
+build/
+DerivedData/
+*.xcuserdata
+*.xcworkspace
+xcuserdata/
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Swift Package Manager
+.build/
+Packages/
+
+# Claude Code
+.claude/settings.local.json
+
+# Screenshots (regenerated, large binaries)
+screenshots/diff/
+screenshots/ios/
+screenshots/pwa/
+screenshots/test/

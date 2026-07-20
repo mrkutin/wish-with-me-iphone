@@ -1,0 +1,28 @@
+appId: me.wishwith.app
+---
+- launchApp
+# Wait for the wishlists screen
+- extendedWaitUntil:
+    visible: "Birthday Gifts"
+    timeout: 15000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+# Navigate into the wishlist
+- tapOn: "Birthday Gifts"
+- waitForAnimationToEnd:
+    timeout: 5000
+# Pull to refresh to trigger sync which will pull the resolved item
+- swipe:
+    start: 50%, 50%
+    end: 50%, 80%
+- waitForAnimationToEnd:
+    timeout: 10000
+# After sync, "Resolving..." should be gone and replaced by resolved content
+- assertNotVisible:
+    text: "Resolving..."
+# The item title should have been updated from "www.ozon.ru" to the resolved title
+- assertNotVisible:
+    text: "www.ozon.ru"

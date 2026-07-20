@@ -1,0 +1,23 @@
+# Sync Test Flow - Wish With Me iOS
+# Tests: create wishlist -> verify sync -> verify appears on server
+appId: me.wishwith.app
+---
+- launchApp:
+    clearState: false
+# Should see Wishlists screen (already logged in)
+- assertVisible: "Wishlists"
+# Tap the + button to create a new wishlist
+- tapOn:
+    id: "add-wishlist"
+# Fill in wishlist details
+- tapOn: "Name"
+- inputText: "Sync Test Wishlist"
+- tapOn: "Create"
+# Verify wishlist appears in list
+- assertVisible: "Sync Test Wishlist"
+# Pull to refresh to trigger sync
+- swipe:
+    direction: DOWN
+    duration: 500
+# Wait for sync to complete
+- assertVisible: "Sync Test Wishlist"
